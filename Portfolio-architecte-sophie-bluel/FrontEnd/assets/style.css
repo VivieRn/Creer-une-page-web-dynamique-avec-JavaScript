@@ -58,6 +58,11 @@ header {
 	justify-content: space-between;
 	margin: 50px 0
 }
+a {
+	text-decoration: none;
+	font-family: 'Syne';
+	color: #1D6154;
+}
 section {
 	margin: 50px 0
 }

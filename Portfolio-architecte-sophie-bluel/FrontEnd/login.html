@@ -12,18 +12,37 @@
     />
     <meta name="description" content="" />
     <link rel="stylesheet" href="./assets/style.css" />
+    <link rel="stylesheet" href="./assets/login.css" />
   </head>
   <body>
     <header>
       <h1>Sophie Bluel <span>Architecte d'inteérieur</span></h1>
       <nav>
         <ul>
-          <li><a href="#portfolio">projets</a></li>
-          <li><a href="#contact">contact</a></li>
+          <li><a href="#index.html/portfolio">projets</a></li>
+          <li><a href="index.html/#contact">contact</a></li>
           <li><a href="index.html">Accueil</a></li>
           <li><img src="./assets/icons/instagram.png" alt="Instagram" /></li>
         </ul>
       </nav>
     </header>
+    <main>
+      <div class="containerLogin">
+        <div class="cardLogin">
+          <h2>Log In</h2>
+          <ul>
+            <li>E-mail<br /><input type="text" id="email" name="email" /></li>
+            <li>Mot de passe<br /><input type="text" id="mdp" name="mdp" /></li>
+            <div class="btn">
+              <button class="seConnecter" type="submit">Se connecter</button
+              ><br />
+              <button class="mdpOublie" type="submit">
+                Mot de passe oublié
+              </button>
+            </div>
+          </ul>
+        </div>
+      </div>
+    </main>
   </body>
 </html>

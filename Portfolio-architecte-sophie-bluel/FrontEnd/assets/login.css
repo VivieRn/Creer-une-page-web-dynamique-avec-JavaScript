@@ -1,0 +1,44 @@
+.containerLogin {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 20%;
+}
+.cardLogin h2 {
+    display: flex;
+    justify-content: center;
+}
+.cardLogin li {
+    padding-top: 10%;
+    padding-bottom: 10%;
+}
+.cardLogin a {
+    font-family: 'Syne';
+    font-weight: 200;
+}
+input {
+    margin-top: 7%;
+    border: none;
+    width: 20em;
+    height: 2em;
+}
+.btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.seConnecter {
+    background-color: #1D6154;
+    color: white;
+    width: 75%;
+    height: 3em;
+    border-radius: 20px;
+    margin-bottom: 10%;
+}
+.mdpOublie {
+    width: 75%;
+    border: none;
+}
+li:hover {
+    color: #1D6154;
+  }
