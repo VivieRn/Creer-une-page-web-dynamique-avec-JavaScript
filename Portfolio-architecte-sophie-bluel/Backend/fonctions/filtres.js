@@ -1,9 +1,8 @@
 async function fetchCardImages() {
   const response = await fetch("http://localhost:5678/api/works");
   const cardImages = await response.json();
-  genererCardImages(cardImages);
+  return cardImages;
 }
-
 //Fonction de génération de cartes images
 function genererCardImages(cardImages) {
   for (let i = 0; i < cardImages.length; i++) {
@@ -21,7 +20,18 @@ function genererCardImages(cardImages) {
   }
 }
 
-fetchCardImages();
+fetchCardImages().then((cardImages) => {
+  genererCardImages(cardImages);
+});
 
 //Fonction de tri des objets
 const boutonObjet = document.querySelector(".objets");
+
+boutonObjet.addEventListener("click", async function () {
+  const cardImages = await fetchCardImages();
+  const objetsFiltres = cardImages.filter(function (cardImages) {
+    return cardImages.categoryId === 1;
+  });
+  document.querySelector(".gallery").innerHTML = "";
+  genererCardImages(objetsFiltres);
+});
