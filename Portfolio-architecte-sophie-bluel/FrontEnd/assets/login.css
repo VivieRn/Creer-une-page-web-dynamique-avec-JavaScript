@@ -24,7 +24,7 @@ input {
     margin-top: 7%;
     margin-bottom: 8%;
 }
-.btn {
+.btnLogin {
     display: flex;
     flex-direction: column;
     align-items: center;
