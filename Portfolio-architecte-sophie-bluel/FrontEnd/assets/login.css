@@ -8,19 +8,21 @@
     display: flex;
     justify-content: center;
 }
-.cardLogin li {
+.cardLogin form {
+    display: flex;
+    flex-direction: column;
     padding-top: 10%;
-    padding-bottom: 10%;
 }
 .cardLogin a {
     font-family: 'Syne';
     font-weight: 200;
 }
 input {
-    margin-top: 7%;
     border: none;
     width: 20em;
     height: 2em;
+    margin-top: 7%;
+    margin-bottom: 8%;
 }
 .btn {
     display: flex;
@@ -34,6 +36,10 @@ input {
     height: 3em;
     border-radius: 20px;
     margin-bottom: 10%;
+}
+.containerMdpOublie {
+    display: flex;
+    justify-content: center;
 }
 .mdpOublie {
     width: 75%;
