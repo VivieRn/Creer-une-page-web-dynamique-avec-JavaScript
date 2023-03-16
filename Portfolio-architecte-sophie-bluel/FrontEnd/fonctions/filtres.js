@@ -19,7 +19,7 @@ function genererCardImages(cardImages) {
     pieceElement.appendChild(nomElement);
   }
 }
-
+document.querySelector(".gallery").innerHTML = "";
 fetchCardImages().then((cardImages) => {
   genererCardImages(cardImages);
 });
