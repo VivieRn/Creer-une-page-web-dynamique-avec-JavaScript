@@ -9,6 +9,7 @@ async function fetchLogin(event) {
 
   const response = await fetch("http://localhost:5678/api/users/login", {
     method: "POST",
+    mode: "cors",
     headers: {
       "content-type": "application/json",
     },
@@ -18,7 +19,7 @@ async function fetchLogin(event) {
   if (response.ok) {
     const data = await response.json();
     const token = data.token;
-    document.cookie = `access_token=${token}; Secure; HttpOnly`;
+
     window.location.href = "index.html";
   } else {
     const error = await response.json();
@@ -35,6 +36,7 @@ async function getData() {
       headers: {
         Authorization: `Bearer ${jwt}`,
       },
+      mode: "cors",
     });
     const data = await response.json();
     // Traiter les données de la réponse
