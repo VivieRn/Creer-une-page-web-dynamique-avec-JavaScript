@@ -1,26 +1,44 @@
 const form = document.querySelector("form");
+form.addEventListener("submit", fetchLogin);
 
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
+async function fetchLogin(event) {
+  event.preventDefault();
 
   const email = form.email.value;
-  const mdp = form.mdp.value;
+  const password = form.mdp.value;
 
-  const authenticated = authentication(email, mdp);
+  const response = await fetch("http://localhost:5678/api/users/login", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({ email, password }),
+  });
 
-  if (authenticated) {
+  if (response.ok) {
+    const data = await response.json();
+    const token = data.token;
+    document.cookie = `access_token=${token}; Secure; HttpOnly`;
     window.location.href = "index.html";
   } else {
-    alert("E-mail et/ou mot de passe incorrect.");
+    const error = await response.json();
+    alert(error.message);
   }
-});
+}
 
-// Fonction d'authentification
-
-function authentication(email, mdp) {
-  if (email === "admin" && mdp === "admin") {
-    return true;
+async function getData() {
+  const cookies = document.cookie.split("; ");
+  const token = cookies.find((cookie) => cookie.startsWith("access_token="));
+  if (token) {
+    const jwt = token.split("=")[1];
+    const response = await fetch("http://localhost:5678/api/users", {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+    const data = await response.json();
+    // Traiter les données de la réponse
   } else {
-    return false;
+    // Gérer l'absence du jeton d'accès
   }
 }

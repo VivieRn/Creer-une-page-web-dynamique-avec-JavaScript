@@ -3,6 +3,7 @@ async function fetchCardImages() {
   const cardImages = await response.json();
   return cardImages;
 }
+
 //Fonction de génération de cartes images
 function genererCardImages(cardImages) {
   for (let i = 0; i < cardImages.length; i++) {
