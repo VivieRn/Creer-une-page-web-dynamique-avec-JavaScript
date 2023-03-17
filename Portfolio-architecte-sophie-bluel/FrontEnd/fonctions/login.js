@@ -8,12 +8,12 @@ async function fetchLogin(event) {
   const password = form.mdp.value;
 
   const response = await fetch("http://localhost:5678/api/users/login", {
-    method: "POST",
-    mode: "cors",
+    body: JSON.stringify({ email, password }),
     headers: {
       "content-type": "application/json",
     },
-    body: JSON.stringify({ email, password }),
+    method: "POST",
+    mode: "cors",
   });
 
   if (response.ok) {
