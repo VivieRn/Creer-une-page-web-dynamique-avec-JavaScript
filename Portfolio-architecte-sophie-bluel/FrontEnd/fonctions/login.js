@@ -23,7 +23,7 @@ async function fetchLogin(event) {
     window.location.href = "index.html";
   } else {
     const error = await response.json();
-    alert(error.message);
+    alert("E-mail et/ou mot de passe incorrect.");
   }
 }
 
@@ -41,6 +41,6 @@ async function getData() {
     const data = await response.json();
     // Traiter les données de la réponse
   } else {
-    // Gérer l'absence du jeton d'accès
+    alert("Token d'identification manquant.");
   }
 }
