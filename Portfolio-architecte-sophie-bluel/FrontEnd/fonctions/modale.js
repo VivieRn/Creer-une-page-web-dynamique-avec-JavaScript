@@ -3,9 +3,11 @@ const focusableSelector = "button, input, textarea";
 let focusables = [];
 let previouslyFocusedElement = null;
 
-const openModal = function (e) {
+const openModal = async function (e) {
   e.preventDefault();
-  modal = document.querySelector(e.target.getAttribute("href"));
+  const target = e.target.getAttribute("href");
+  modal = await loadModal(target);
+  modal = document.querySelector();
   focusables = Array.from(modal.querySelectorAll(focusableSelector));
   previouslyFocusedElement = document.querySelector(":focus");
   focusables[0].focus();
@@ -58,6 +60,19 @@ const focusInModal = function (e) {
     index = focusables.length - 1;
   }
   focusables[index].focus();
+};
+
+const loadModal = async function (url) {
+  const target = "#" + url.split("#")[1];
+  const html = await fetch(url).then((response) => response.text());
+  const element = document
+    .createRange()
+    .createContextualFragment(html)
+    .querySelector(target);
+  if (element === null)
+    throw `L'élément ${target} n'a pas été trouvé dans la page ${url}`;
+  document.body.append(element);
+  return element;
 };
 
 document.querySelectorAll(".js-modale").forEach((a) => {
