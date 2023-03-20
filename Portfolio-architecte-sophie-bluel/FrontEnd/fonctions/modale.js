@@ -23,10 +23,6 @@ const closeModal = function (e) {
   if (modal === null) return;
   if (previouslyFocusedElement !== null) previouslyFocusedElement.focus();
   e.preventDefault();
-  window.setTimeout(function () {
-    modal.style.display = "none";
-    modal = null;
-  }, 500);
   modal.setAttribute("aria-hidden", "true");
   modal.removeAttribute("aria-modal");
   modal.removeEventListener("click", closeModal);
@@ -36,6 +32,11 @@ const closeModal = function (e) {
   modal
     .querySelector(".js-modal-stop")
     .removeEventListener("click", stopPropagation);
+  const hideModal = function () {
+    modal.style.display = "none";
+    modal.removeEventListener("animationend", hideModal);
+  };
+  modal.addEventListener("animationend", hideModal);
 };
 
 const stopPropagation = function (e) {
