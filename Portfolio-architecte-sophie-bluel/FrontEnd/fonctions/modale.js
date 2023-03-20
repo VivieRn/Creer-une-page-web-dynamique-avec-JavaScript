@@ -6,8 +6,9 @@ let previouslyFocusedElement = null;
 const openModal = async function (e) {
   e.preventDefault();
   const target = e.target.getAttribute("href");
-  modal = await loadModal(target);
-  modal = document.querySelector();
+  {
+    modal = await loadModal(target);
+  }
   focusables = Array.from(modal.querySelectorAll(focusableSelector));
   previouslyFocusedElement = document.querySelector(":focus");
   focusables[0].focus();
@@ -64,6 +65,8 @@ const focusInModal = function (e) {
 
 const loadModal = async function (url) {
   const target = "#" + url.split("#")[1];
+  const existingModal = document.querySelector(target);
+  if (element !== null) return existingModal;
   const html = await fetch(url).then((response) => response.text());
   const element = document
     .createRange()
