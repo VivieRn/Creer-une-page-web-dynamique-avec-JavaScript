@@ -1,11 +1,14 @@
 let modal = null;
 const focusableSelector = "button, input, textarea";
 let focusables = [];
+let previouslyFocusedElement = null;
 
 const openModal = function (e) {
   e.preventDefault();
   modal = document.querySelector(e.target.getAttribute("href"));
   focusables = Array.from(modal.querySelectorAll(focusableSelector));
+  previouslyFocusedElement = document.querySelector(":focus");
+  focusables[0].focus();
   modal.style.display = null;
   modal.removeAttribute("aria-hidden");
   modal.setAttribute("aria-modal", "true");
@@ -18,8 +21,12 @@ const openModal = function (e) {
 
 const closeModal = function (e) {
   if (modal === null) return;
+  if (previouslyFocusedElement !== null) previouslyFocusedElement.focus();
   e.preventDefault();
-  modal.style.display = "none";
+  window.setTimeout(function () {
+    modal.style.display = "none";
+    modal = null;
+  }, 500);
   modal.setAttribute("aria-hidden", "true");
   modal.removeAttribute("aria-modal");
   modal.removeEventListener("click", closeModal);
@@ -29,7 +36,6 @@ const closeModal = function (e) {
   modal
     .querySelector(".js-modal-stop")
     .removeEventListener("click", stopPropagation);
-  modal = null;
 };
 
 const stopPropagation = function (e) {
