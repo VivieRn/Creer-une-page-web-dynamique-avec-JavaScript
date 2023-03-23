@@ -1,5 +1,3 @@
-"use strict";
-
 let modal = null;
 const focusableSelector = "button, input, textarea, a";
 let focusables = [];
@@ -31,19 +29,26 @@ const openModal = async function (e) {
       .querySelector(".ajouterPhotos")
       .addEventListener("click", function () {
         replaceModalContent();
-        console.log("Ajouter photo trouvé !");
       });
   }
-  console.log("openModal function called");
 };
 //Remplacement du contenu pour ajouter une photo
 const replaceModalContent = async function () {
   // Création du contenu formulaire
   const formHTML = `
-<form>
-  <label for="photo-upload">Select a photo to upload:</label>
+  <button class="modal-retour">Retour</button>
+<form class="modaleForm">
+  <label for="photo-upload">Ajout photo</label>
   <input type="file" id="photo-upload" name="photo-upload" accept="image/*">
-  <button type="submit">Upload</button>
+  <label for="title">Titre</label>
+  <input type="text" name="title" id="title">
+  <label for="category">Catégorie :</label>
+  <select name="category" id="category" form="category">
+  <option value="Objets">Objets</option>
+  <option value="Appartements">Appartements</option>
+  <option value="Hôtels & restaurants">Hôtels & restaurants</option>
+</select>
+  <button type="Valider">Envoyer</button>
 </form>
 `;
 

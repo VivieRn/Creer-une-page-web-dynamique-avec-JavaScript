@@ -209,3 +209,6 @@ footer nav ul {
 	margin: 2em
 }
 
+.btnAdmin {
+	display: flex;
+}

@@ -19,8 +19,11 @@ async function fetchLogin(event) {
   if (response.ok) {
     const data = await response.json();
     const token = data.token;
-
     window.location.href = "index.html";
+    if (email === "sophie.bluel@test.tld") {
+      document.querySelector(".btnAdmin").style.display = null;
+      console.log("Admin !!");
+    }
   } else {
     const error = await response.json();
     alert("E-mail et/ou mot de passe incorrect.");
