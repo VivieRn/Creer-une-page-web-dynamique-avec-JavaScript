@@ -1,27 +1,58 @@
+"use strict";
+
 let modal = null;
-const focusableSelector = "button, input, textarea";
+const focusableSelector = "button, input, textarea, a";
 let focusables = [];
 let previouslyFocusedElement = null;
 
+//Ouvrir la modale présente sur une autre page html
 const openModal = async function (e) {
-  e.preventDefault();
-  const target = e.target.getAttribute("href");
-  {
-    modal = await loadModal(target);
+  if (typeof e !== "undefined") {
+    e.preventDefault();
+    const target = e.target.getAttribute("href");
+    {
+      modal = await loadModal(target);
+    }
+    if (modal) {
+      focusables = Array.from(modal.querySelectorAll(focusableSelector));
+      previouslyFocusedElement = document.querySelector(":focus");
+      focusables[0].focus();
+      modal.style.display = null;
+      modal.setAttribute("aria-modal", "true");
+      modal.addEventListener("click", closeModal);
+      modal
+        .querySelector(".js-modal-close")
+        .addEventListener("click", closeModal);
+      modal
+        .querySelector(".js-modal-stop")
+        .addEventListener("click", stopPropagation);
+    }
+    const addButton = modal
+      .querySelector(".ajouterPhotos")
+      .addEventListener("click", function () {
+        replaceModalContent();
+        console.log("Ajouter photo trouvé !");
+      });
   }
-  focusables = Array.from(modal.querySelectorAll(focusableSelector));
-  previouslyFocusedElement = document.querySelector(":focus");
-  focusables[0].focus();
-  modal.style.display = null;
-  modal.removeAttribute("aria-hidden");
-  modal.setAttribute("aria-modal", "true");
-  modal.addEventListener("click", closeModal);
-  modal.querySelector(".js-modal-close").addEventListener("click", closeModal);
-  modal
-    .querySelector(".js-modal-stop")
-    .addEventListener("click", stopPropagation);
+  console.log("openModal function called");
+};
+//Remplacement du contenu pour ajouter une photo
+const replaceModalContent = async function () {
+  // Création du contenu formulaire
+  const formHTML = `
+<form>
+  <label for="photo-upload">Select a photo to upload:</label>
+  <input type="file" id="photo-upload" name="photo-upload" accept="image/*">
+  <button type="submit">Upload</button>
+</form>
+`;
+
+  // Insertion du formulaire dans la modale
+  const modalContent = modal.querySelector(".modaleGallery");
+  modalContent.innerHTML = formHTML;
 };
 
+//Fermeture de la modale via plusieurs options
 const closeModal = function (e) {
   if (modal === null) return;
   if (previouslyFocusedElement !== null) previouslyFocusedElement.focus();
@@ -46,6 +77,7 @@ const stopPropagation = function (e) {
   e.stopPropagation();
 };
 
+//Gestion de la navigation via 'Tab'
 const focusInModal = function (e) {
   e.preventDefault();
   let index = focusables.findIndex((f) => f === modal.querySelector(":focus"));
@@ -65,8 +97,6 @@ const focusInModal = function (e) {
 
 const loadModal = async function (url) {
   const target = "#" + url.split("#")[1];
-  const existingModal = document.querySelector(target);
-  if (element !== null) return existingModal;
   const html = await fetch(url).then((response) => response.text());
   const element = document
     .createRange()
