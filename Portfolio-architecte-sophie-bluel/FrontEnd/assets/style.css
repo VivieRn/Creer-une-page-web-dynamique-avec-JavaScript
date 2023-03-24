@@ -212,3 +212,7 @@ footer nav ul {
 .btnAdmin {
 	display: none;
 }
+
+#logout {
+	display: none;
+}
