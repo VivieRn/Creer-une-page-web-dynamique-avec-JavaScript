@@ -11,11 +11,15 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function logout() {
-  const btnLogout = document.getElementById("logout");
-  console.log(btnLogout);
-  btnLogout.addEventListener("click", function () {
+  const logoutLink = document.getElementById("logout");
+  logoutLink.addEventListener("click", function (event) {
+    event.preventDefault();
+    console.log("Clicked !");
     window.localStorage.removeItem("token");
     window.localStorage.removeItem("isAdmin");
     window.location.href = "login.html";
   });
 }
+document.addEventListener("DOMContentLoaded", function () {
+  logout();
+});
