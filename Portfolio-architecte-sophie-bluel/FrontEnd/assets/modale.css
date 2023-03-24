@@ -12,6 +12,30 @@
     animation: fadeIn .5s both;
 }
 
+.js-modal-close {
+    border: none;
+    width: 100%;
+    height: 1em;
+    color: black;
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+}
+
+.fa-xmark {
+    font-size: 1.2em;
+}
+
+.titleModale {
+    display: flex;
+    justify-content: center;
+    font-family: 'Syne';
+	font-weight: 200;
+	font-size: 25px;
+    color: black;
+}
+
 .modale[aria-hidden="true"] {
     animation-name: fadeOut;
 }
@@ -33,9 +57,12 @@
 .modaleGallery {
     width: 100%;
 	display: grid;
-	grid-template-columns: 10em 10em 10em;
+	grid-template-columns: 6em 6em 6em 6em 6em;
 	grid-column-gap: 10px;
 	grid-row-gap: 10px;
+    justify-content: center;
+    margin-top: 2em;
+    margin-bottom: 2em;
 }
 
 .modaleGallery img {
