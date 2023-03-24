@@ -83,7 +83,7 @@ h1 > span {
 ;
 }
 
-h2{
+h2, h3, h4{
 	font-family: 'Syne';
 	font-weight: 700;
 	font-size: 30px;
@@ -209,8 +209,16 @@ footer nav ul {
 	margin: 2em
 }
 
+.menuAdmin {
+	display: flex;
+	flex-direction: row;
+	align-items: baseline;
+	justify-content: center;
+}
+
 .btnAdmin {
 	display: none;
+	margin: 1em;
 }
 
 #logout {
