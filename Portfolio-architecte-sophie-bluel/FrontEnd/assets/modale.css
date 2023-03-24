@@ -75,6 +75,27 @@
     justify-content: space-between;
 }
 
+.menuModale1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ajouterPhotos {
+    background-color: #1D6154;
+    color: white;
+    width: 55%;
+    height: 3em;
+    border-radius: 20px;
+    margin-bottom: 2%;
+}
+
+.supprimerGalerie {
+    border: 0;
+    color: red;
+    background-color: white;
+}
+
 @keyframes fadeIn {
     from { opacity: 0;}
     to { opacity: 1;}
