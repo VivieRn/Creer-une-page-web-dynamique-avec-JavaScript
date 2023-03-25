@@ -1,5 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const isAdmin = window.localStorage.getItem("isAdmin") === "true";
+  const cookies = document.cookie.split("; ");
+  const isAdmin =
+    cookies.find((cookie) => cookie.startsWith("isAdmin="))?.split("=")[1] ===
+    "true";
   if (isAdmin) {
     const btnAdmin = document.getElementById("btnAdmin");
     btnAdmin.style.display = "block";
@@ -15,11 +18,14 @@ function logout() {
   logoutLink.addEventListener("click", function (event) {
     event.preventDefault();
     console.log("Clicked !");
-    window.localStorage.removeItem("token");
-    window.localStorage.removeItem("isAdmin");
+    document.cookie =
+      "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; Secure; SameSite=Strict;";
+    document.cookie =
+      "isAdmin=; expires=Thu, 01 Jan 1970 00:00:00 UTC; Secure; SameSite=Strict;";
     window.location.href = "login.html";
   });
 }
+
 document.addEventListener("DOMContentLoaded", function () {
   logout();
 });
