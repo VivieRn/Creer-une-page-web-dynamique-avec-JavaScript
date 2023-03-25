@@ -1,10 +1,13 @@
+export { fetchCardImages };
+export { genererCardImages };
+
 async function fetchCardImages() {
   const response = await fetch("http://localhost:5678/api/works");
   const cardImages = await response.json();
   return cardImages;
 }
 
-//Fonction de génération de cartes images
+// Fonction de génération de cartes images
 function genererCardImages(cardImages) {
   for (let i = 0; i < cardImages.length; i++) {
     const article = cardImages[i];
@@ -20,7 +23,11 @@ function genererCardImages(cardImages) {
     pieceElement.appendChild(nomElement);
   }
 }
+
+// Supprime le contenu HTML de la section avec la classe "gallery"
 document.querySelector(".gallery").innerHTML = "";
+
+// Récupère les données de la carte d'images à partir de l'API et appelle la fonction genererCardImages
 fetchCardImages().then((cardImages) => {
   genererCardImages(cardImages);
 });
