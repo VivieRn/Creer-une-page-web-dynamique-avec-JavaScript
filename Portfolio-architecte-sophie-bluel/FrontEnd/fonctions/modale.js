@@ -45,10 +45,14 @@ const openModal = async function (e) {
       //Suppression d'images par ID
       const deleteImage = async (imageId) => {
         try {
+          const token = getAccessTokenFromCookie();
           const response = await fetch(
             `http://localhost:5678/api/works/${imageId}`,
             {
               method: "DELETE",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
             }
           );
           const responseData = await response.json();
@@ -224,3 +228,13 @@ window.addEventListener("keydown", function (e) {
     focusInModal(e);
   }
 });
+
+function getAccessTokenFromCookie() {
+  const cookie = document.cookie
+    .split(";")
+    .find((cookie) => cookie.trim().startsWith("access_token="));
+  if (!cookie) {
+    return null;
+  }
+  return cookie.split("=")[1];
+}
