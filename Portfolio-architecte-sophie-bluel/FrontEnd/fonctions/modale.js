@@ -24,10 +24,14 @@ const openModal = async function (e) {
       modal
         .querySelector(".js-modal-stop")
         .addEventListener("click", stopPropagation);
-      const addButton = modal.querySelector(".ajouterPhotos");
-      addButton.addEventListener("click", replaceModalContent);
 
-      // Ajouter l'événement de suppression pour chaque bouton de suppression
+      //Ajout de l'événement d'ajout de photos
+      const addButton = modal.querySelector(".ajouterPhotos");
+      addButton.addEventListener("click", async () => {
+        await replaceModalContent();
+      });
+
+      // Ajout de l'événement de suppression pour chaque bouton de suppression
       const deleteButtons = modal.querySelectorAll(".imgDelete");
       deleteButtons.forEach(function (button) {
         button.addEventListener("click", async (e) => {
@@ -111,6 +115,48 @@ const openModal = async function (e) {
           });
         });
       });
+
+      //Remplacement du contenu pour ajouter une photo
+      const replaceModalContent = async function () {
+        // Création du contenu formulaire
+        const formHTML = `
+          <button class="modal-retour"><i class="fa-sharp fa-solid fa-arrow-left"></i></button>
+          <form class="modaleForm">
+            <label for="photo-upload">Ajout photo</label>
+            <input type="file" id="photo-upload" name="photo-upload" accept="image/*">
+            <label for="title">Titre</label>
+            <input type="text" name="title" id="title">
+            <label for="category">Catégorie :</label>
+            <select name="category" id="category" form="category">
+              <option value="Objets">Objets</option>
+              <option value="Appartements">Appartements</option>
+              <option value="Hôtels & restaurants">Hôtels & restaurants</option>
+            </select>
+            <button type="submit">Envoyer</button>
+          </form>
+        `;
+
+        // Insertion du formulaire dans la modale
+        const modaleGallery = modal.querySelector(".modaleGallery");
+        modaleGallery.style.display = "none";
+        const menuModale1 = modal.querySelector(".menuModale1");
+        menuModale1.style.display = "none";
+
+        const modalContent = modal.querySelector(".js-modale");
+        modalContent.innerHTML = formHTML;
+        const form = modal.querySelector(".modaleForm");
+        form.addEventListener("submit", handleFormSubmit);
+        const retourButton = modal.querySelector(".modal-retour");
+        retourButton.addEventListener("click", handleRetourClick);
+      };
+
+      //Gestion de l'événement retour depuis ajouter une photo
+      const handleRetourClick = () => {
+        const modaleGallery = modal.querySelector(".modaleGallery");
+        modaleGallery.style.display = "none";
+        const menuModale1 = modal.querySelector(".menuModale1");
+        menuModale1.style.display = "none";
+      };
     }
   }
 };
@@ -138,35 +184,6 @@ const closeModal = function (e) {
 
 const stopPropagation = function (e) {
   e.stopPropagation();
-};
-
-//Remplacement du contenu pour ajouter une photo
-const replaceModalContent = async function () {
-  // Création du contenu formulaire
-  const formHTML = `
-    <button class="modal-retour"><i class="fa-sharp fa-solid fa-arrow-left"></i></button>
-    <form class="modaleForm">
-      <label for="photo-upload">Ajout photo</label>
-      <input type="file" id="photo-upload" name="photo-upload" accept="image/*">
-      <label for="title">Titre</label>
-      <input type="text" name="title" id="title">
-      <label for="category">Catégorie :</label>
-      <select name="category" id="category" form="category">
-        <option value="Objets">Objets</option>
-        <option value="Appartements">Appartements</option>
-        <option value="Hôtels & restaurants">Hôtels & restaurants</option>
-      </select>
-      <button type="submit">Envoyer</button>
-    </form>
-  `;
-
-  // Insertion du formulaire dans la modale
-  const modalContent = modal.querySelector(".js-modale");
-  modalContent.innerHTML = formHTML;
-  const form = modalContent.querySelector(".modaleForm");
-  form.addEventListener("submit", handleFormSubmit);
-  const retourButton = modalContent.querySelector(".modal-retour");
-  /*retourButton.addEventListener("click", handleRetourClick);*/
 };
 
 // Traitement du formulaire pour ajouter une photo
