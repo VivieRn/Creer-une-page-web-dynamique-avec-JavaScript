@@ -68,7 +68,7 @@ const openModal = async function (e) {
         }
       };
 
-      // Récupère les données de la carte d'images à partir de l'API et appelle la fonction genererCardImages
+      // Récupère les données de la carte image à partir de l'API et appelle la fonction genererCardImages
       const sectionGallery = modal.querySelector(".modaleGallery");
       sectionGallery.innerHTML = "";
 
@@ -77,13 +77,7 @@ const openModal = async function (e) {
 
         cardImages.forEach((cardImage) => {
           const pieceElement = document.createElement("figure");
-          const imageElement = document.createElement("img");
-          imageElement.src = cardImage.imageUrl;
-          const nomElement = document.createElement("figcaption");
-          nomElement.innerText = cardImage.title;
-
-          pieceElement.appendChild(imageElement);
-          pieceElement.appendChild(nomElement);
+          pieceElement.className = "CarteImage";
 
           // Ajout du bouton de suppression
           const deleteButton = document.createElement("button");
@@ -93,6 +87,14 @@ const openModal = async function (e) {
           deleteIcon.className = "fa-solid fa-xmark";
           deleteButton.appendChild(deleteIcon);
           pieceElement.appendChild(deleteButton);
+
+          const imageElement = document.createElement("img");
+          imageElement.src = cardImage.imageUrl;
+          const nomElement = document.createElement("figcaption");
+          nomElement.innerText = cardImage.title;
+
+          pieceElement.appendChild(imageElement);
+          pieceElement.appendChild(nomElement);
 
           sectionGallery.appendChild(pieceElement);
 
@@ -142,7 +144,7 @@ const stopPropagation = function (e) {
 const replaceModalContent = async function () {
   // Création du contenu formulaire
   const formHTML = `
-    <button class="modal-retour">Retour</button>
+    <button class="modal-retour"><i class="fa-sharp fa-solid fa-arrow-left"></i></button>
     <form class="modaleForm">
       <label for="photo-upload">Ajout photo</label>
       <input type="file" id="photo-upload" name="photo-upload" accept="image/*">
@@ -159,12 +161,12 @@ const replaceModalContent = async function () {
   `;
 
   // Insertion du formulaire dans la modale
-  const modalContent = modal.querySelector(".modaleGallery");
+  const modalContent = modal.querySelector(".js-modale");
   modalContent.innerHTML = formHTML;
   const form = modalContent.querySelector(".modaleForm");
   form.addEventListener("submit", handleFormSubmit);
   const retourButton = modalContent.querySelector(".modal-retour");
-  retourButton.addEventListener("click", handleRetourClick);
+  /*retourButton.addEventListener("click", handleRetourClick);*/
 };
 
 // Traitement du formulaire pour ajouter une photo
@@ -176,10 +178,54 @@ const handleFormSubmit = async function (e) {
     const response = await fetch("http://localhost:5678/api/works", {
       method: "POST",
       body: formData,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
+    const responseData = await response.json();
     if (!response.ok) {
       throw new Error("Une erreur s'est produite lors de l'ajout de la photo.");
     }
+
+    // Création de la nouvelle carte image
+    const newCardImage = {
+      id: responseData.id,
+      title: formData.get("title"),
+      imageUrl: responseData.imageUrl,
+    };
+
+    // Création des éléments HTML de la carte image
+    const pieceElement = document.createElement("figure");
+    const imageElement = document.createElement("img");
+    imageElement.src = newCardImage.imageUrl;
+    const nomElement = document.createElement("figcaption");
+    nomElement.innerText = newCardImage.title;
+
+    pieceElement.appendChild(imageElement);
+    pieceElement.appendChild(nomElement);
+
+    // Ajout du bouton de suppression
+    const deleteButton = document.createElement("button");
+    deleteButton.className = "imgDelete";
+    deleteButton.setAttribute("data-id", newCardImage.id);
+    const deleteIcon = document.createElement("i");
+    deleteIcon.className = "fa-solid fa-xmark";
+    deleteButton.appendChild(deleteIcon);
+    pieceElement.appendChild(deleteButton);
+
+    sectionGallery.appendChild(pieceElement);
+
+    // Ajout de l'écouteur d'événements de suppression
+    deleteButton.addEventListener("click", async (e) => {
+      e.preventDefault();
+      const imageId = deleteButton.getAttribute("data-id");
+      console.log(`delete button clicked with imageId ${imageId}`);
+      await deleteImage(imageId);
+      const cardImage = document.querySelector(`[data-id="${imageId}"]`);
+      if (cardImage) {
+        cardImage.remove();
+      }
+    });
   } catch (error) {
     console.error(error);
   }
@@ -229,6 +275,7 @@ window.addEventListener("keydown", function (e) {
   }
 });
 
+//Récupération du token d'authentification
 function getAccessTokenFromCookie() {
   const cookie = document.cookie
     .split(";")

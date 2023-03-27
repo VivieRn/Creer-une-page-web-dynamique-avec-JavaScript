@@ -65,14 +65,31 @@
     margin-bottom: 2em;
 }
 
+.carteImage {
+    position: relative;
+}
+
 .modaleGallery img {
     width: 100%;
+    z-index: 2;
+}
+
+.imgDelete {
+    border: none;
+    z-index: 1;
+    position: absolute;
 }
 
 .modaleForm {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    max-width: 300px;
+}
+
+.modal-retour {
+    border: none;
+    background-color: white;
 }
 
 .menuModale1 {
