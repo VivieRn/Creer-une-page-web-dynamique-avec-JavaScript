@@ -33,7 +33,7 @@ const openModal = async function (e) {
         button.addEventListener("click", async (e) => {
           e.preventDefault();
           const imageId = button.dataset.id;
-          console.log(imageId);
+          console.log(`delete button clicked with imageId ${imageId}`);
           await deleteImage(imageId);
           const cardImage = document.querySelector(`[data-id="${imageId}"]`);
           if (cardImage) {
@@ -42,11 +42,35 @@ const openModal = async function (e) {
         });
       });
 
+      //Suppression d'images par ID
+      const deleteImage = async (imageId) => {
+        try {
+          const response = await fetch(
+            `http://localhost:5678/api/works/${imageId}`,
+            {
+              method: "DELETE",
+            }
+          );
+          const responseData = await response.json();
+          if (!response.ok) {
+            throw new Error(responseData.message || "Unable to delete image.");
+          }
+          const cardImage = document.querySelector(`[data-id="${imageId}"]`);
+          if (cardImage) {
+            cardImage.remove();
+          }
+        } catch (err) {
+          console.error(`Error deleting image: ${err}`);
+        }
+      };
+
       // Récupère les données de la carte d'images à partir de l'API et appelle la fonction genererCardImages
       const sectionGallery = modal.querySelector(".modaleGallery");
       sectionGallery.innerHTML = "";
+
       fetchCardImages().then((cardImages) => {
         genererCardImages(cardImages);
+
         cardImages.forEach((cardImage) => {
           const pieceElement = document.createElement("figure");
           const imageElement = document.createElement("img");
@@ -56,24 +80,35 @@ const openModal = async function (e) {
 
           pieceElement.appendChild(imageElement);
           pieceElement.appendChild(nomElement);
-          sectionGallery.appendChild(pieceElement);
 
           // Ajout du bouton de suppression
           const deleteButton = document.createElement("button");
           deleteButton.className = "imgDelete";
+          deleteButton.setAttribute("data-id", cardImage.id);
           const deleteIcon = document.createElement("i");
           deleteIcon.className = "fa-solid fa-xmark";
           deleteButton.appendChild(deleteIcon);
           pieceElement.appendChild(deleteButton);
 
           sectionGallery.appendChild(pieceElement);
-          pieceElement.appendChild(imageElement);
-          pieceElement.appendChild(nomElement);
+
+          // Ajout de l'écouteur d'événements de suppression
+          deleteButton.addEventListener("click", async (e) => {
+            e.preventDefault();
+            const imageId = deleteButton.getAttribute("data-id");
+            console.log(`delete button clicked with imageId ${imageId}`);
+            await deleteImage(imageId);
+            const cardImage = document.querySelector(`[data-id="${imageId}"]`);
+            if (cardImage) {
+              cardImage.remove();
+            }
+          });
         });
       });
     }
   }
 };
+
 //Fermeture de la modale via plusieurs options
 const closeModal = function (e) {
   if (modal === null) return;
@@ -189,22 +224,3 @@ window.addEventListener("keydown", function (e) {
     focusInModal(e);
   }
 });
-
-//Suppression d'images par ID
-const deleteImage = async (imageId) => {
-  try {
-    const response = await fetch(`http://localhost:5678/api/works/${imageId}`, {
-      method: "DELETE",
-    });
-    const responseData = await response.json();
-    if (!response.ok) {
-      throw new Error(responseData.message || "Unable to delete image.");
-    }
-    const cardImage = fetchCardImages.querySelector(`[data-id="${imageId}"]`);
-    if (cardImage) {
-      cardImage.remove();
-    }
-  } catch (err) {
-    console.error(`Error deleting image: ${err}`);
-  }
-};
