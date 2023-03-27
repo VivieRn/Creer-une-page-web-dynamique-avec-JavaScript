@@ -43,16 +43,37 @@ const openModal = async function (e) {
       });
 
       // Récupère les données de la carte d'images à partir de l'API et appelle la fonction genererCardImages
-      /*const sectionGallery = modal.querySelector(".modaleGallery");
+      const sectionGallery = modal.querySelector(".modaleGallery");
       sectionGallery.innerHTML = "";
       fetchCardImages().then((cardImages) => {
         genererCardImages(cardImages);
-        sectionGallery.appendChild(cardImages);
-      });*/
+        cardImages.forEach((cardImage) => {
+          const pieceElement = document.createElement("figure");
+          const imageElement = document.createElement("img");
+          imageElement.src = cardImage.imageUrl;
+          const nomElement = document.createElement("figcaption");
+          nomElement.innerText = cardImage.title;
+
+          pieceElement.appendChild(imageElement);
+          pieceElement.appendChild(nomElement);
+          sectionGallery.appendChild(pieceElement);
+
+          // Ajout du bouton de suppression
+          const deleteButton = document.createElement("button");
+          deleteButton.className = "imgDelete";
+          const deleteIcon = document.createElement("i");
+          deleteIcon.className = "fa-solid fa-xmark";
+          deleteButton.appendChild(deleteIcon);
+          pieceElement.appendChild(deleteButton);
+
+          sectionGallery.appendChild(pieceElement);
+          pieceElement.appendChild(imageElement);
+          pieceElement.appendChild(nomElement);
+        });
+      });
     }
   }
 };
-
 //Fermeture de la modale via plusieurs options
 const closeModal = function (e) {
   if (modal === null) return;
