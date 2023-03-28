@@ -188,11 +188,29 @@ const stopPropagation = function (e) {
   e.stopPropagation();
 };
 
-// Traitement du formulaire pour ajouter une photo
+//Défintion des catégories pour ajout photo
+const categories = {
+  Objets: "1",
+  Appartements: "2",
+  "Hôtels & restaurants": "3",
+};
+
 const handleFormSubmit = async function (e) {
   e.preventDefault();
+  const token = getAccessTokenFromCookie();
   const form = e.target;
+
+  // Transformation de la catégorie
+  const categorySelect = form.querySelector("#category");
+  const categoryValue =
+    categorySelect.options[categorySelect.selectedIndex].value;
+  const category = categories[categoryValue];
+
   const formData = new FormData(form);
+
+  // Ajout de la catégorie transformée à l'objet formData
+  formData.append("category", category);
+
   try {
     const response = await fetch("http://localhost:5678/api/works", {
       method: "POST",
@@ -211,6 +229,7 @@ const handleFormSubmit = async function (e) {
       id: responseData.id,
       title: formData.get("title"),
       imageUrl: responseData.imageUrl,
+      categoryId: categories[formData.get("category")],
     };
 
     // Création des éléments HTML de la carte image
