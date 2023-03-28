@@ -137,12 +137,12 @@ const openModal = async function (e) {
         `;
 
         // Insertion du formulaire dans la modale
-        const modaleGallery = modal.querySelector(".modaleGallery");
+        const modaleGallery = modal.querySelector(".js-modale");
         modaleGallery.style.display = "none";
         const menuModale1 = modal.querySelector(".menuModale1");
         menuModale1.style.display = "none";
 
-        const modalContent = modal.querySelector(".js-modale");
+        const modalContent = modal.querySelector(".js-modale2");
         modalContent.innerHTML = formHTML;
         const form = modal.querySelector(".modaleForm");
         form.addEventListener("submit", handleFormSubmit);
@@ -152,10 +152,12 @@ const openModal = async function (e) {
 
       //Gestion de l'événement retour depuis ajouter une photo
       const handleRetourClick = () => {
-        const modaleGallery = modal.querySelector(".modaleGallery");
-        modaleGallery.style.display = "none";
+        const jsModale2 = modal.querySelector(".js-modale2");
+        jsModale2.style.display = "none";
+        const jsModale = modal.querySelector(".js-modale");
+        jsModale.style.display = "block";
         const menuModale1 = modal.querySelector(".menuModale1");
-        menuModale1.style.display = "none";
+        menuModale1.style.display = "flex";
       };
     }
   }
