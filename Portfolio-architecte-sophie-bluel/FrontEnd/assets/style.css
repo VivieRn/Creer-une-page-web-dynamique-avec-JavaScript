@@ -194,6 +194,8 @@ margin: auto;
 }
 #contact label {
 	margin: 2em 0 1em 0;
+	width: 100%;
+	justify-content: left;
 }
 #contact textarea {
 	border: none;
