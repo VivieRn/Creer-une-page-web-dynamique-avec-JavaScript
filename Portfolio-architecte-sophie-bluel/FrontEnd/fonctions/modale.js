@@ -1,4 +1,5 @@
 import { fetchCardImages, genererCardImages } from "./filtres.js";
+/*import decode from "../../Backend/node_modules/jsonwebtoken/decode.js";*/
 
 let modal = null;
 const focusableSelector = "button, input, textarea, a";
@@ -122,17 +123,19 @@ const openModal = async function (e) {
         const formHTML = `
           <button class="modal-retour"><i class="fa-sharp fa-solid fa-arrow-left"></i></button>
           <form class="modaleForm">
-            <label for="photo-upload">Ajout photo</label>
-            <input type="file" id="photo-upload" name="photo-upload" accept="image/*">
-            <label for="title">Titre</label>
+            <label class="modaleFormMainTitle" for="file">Ajout photo</label>
+            <input type="file" id="file" name="file" accept="image/*">
+            <label class="modaleFormTitle" for="title">Titre</label>
             <input type="text" name="title" id="title">
-            <label for="category">Catégorie :</label>
-            <select name="category" id="category" form="category">
+            <label class="modaleFormTitle" for="category">Catégorie</label>
+            <select name="category" id="category">
               <option value="Objets">Objets</option>
               <option value="Appartements">Appartements</option>
               <option value="Hôtels & restaurants">Hôtels & restaurants</option>
             </select>
-            <button type="submit">Envoyer</button>
+            <div>
+            <button type="submit">Valider</button>
+            </div>
           </form>
         `;
 
@@ -197,7 +200,6 @@ const categories = {
 
 const handleFormSubmit = async function (e) {
   e.preventDefault();
-  const token = getAccessTokenFromCookie();
   const form = e.target;
 
   // Transformation de la catégorie
@@ -212,12 +214,14 @@ const handleFormSubmit = async function (e) {
   formData.append("category", category);
 
   try {
+    const token = getAccessTokenFromCookie();
     const response = await fetch("http://localhost:5678/api/works", {
-      method: "POST",
-      body: formData,
       headers: {
+        accept: "application/json",
         Authorization: `Bearer ${token}`,
       },
+      body: formData,
+      method: "POST",
     });
     const responseData = await response.json();
     if (!response.ok) {
@@ -318,6 +322,17 @@ function getAccessTokenFromCookie() {
   const cookie = document.cookie
     .split(";")
     .find((cookie) => cookie.trim().startsWith("access_token="));
+  if (!cookie) {
+    return null;
+  }
+  return cookie.split("=")[1];
+}
+
+//Récupération du userId
+function getUserIdFromCookie() {
+  const cookie = document.cookie
+    .split(";")
+    .find((cookie) => cookie.trim().startsWith("userId="));
   if (!cookie) {
     return null;
   }

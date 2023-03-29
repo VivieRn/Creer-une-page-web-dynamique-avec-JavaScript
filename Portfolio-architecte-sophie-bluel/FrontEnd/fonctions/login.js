@@ -19,11 +19,14 @@ async function fetchLogin(event) {
   if (response.ok) {
     const data = await response.json();
     const token = data.token;
-    const cookieString = `access_token=${token}; Secure; SameSite=Strict`;
+    const cookieString = `access_token=${token}; Secure; SameSite=Strict; Max-Age=450`;
     document.cookie = cookieString;
     const isAdmin = email === "sophie.bluel@test.tld";
-    const adminCookieString = `isAdmin=${isAdmin}; Secure; SameSite=Strict`;
+    const adminCookieString = `isAdmin=${isAdmin}; sameSite=Strict; Secure; Max-Age=900`;
     document.cookie = adminCookieString;
+    const userId = data.userId;
+    const userIdCookieString = `userId=${userId}; sameSite=None; Secure; max-age=900`; // 900 seconds = 15 minutes
+    document.cookie = userIdCookieString;
     window.location.href = "index.html";
   } else {
     const error = await response.json();

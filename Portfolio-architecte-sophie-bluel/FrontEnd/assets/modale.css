@@ -83,8 +83,56 @@
 .modaleForm {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    max-width: 300px;
+    align-items: center;
+    width: 100%;
+}
+
+.modaleForm input, label, select {
+    display: flex;
+    justify-content: center;
+    height: 20px;
+    font-size: 1.2em;
+    width: 80%;
+    margin: 2%;
+    background-color: white;
+    border: none;
+}
+
+.modaleFormMainTitle {
+    font-weight: 200;
+    font-size: 25px;
+    color: black;
+    margin: 5%;
+}
+
+.modaleFormTitle {
+    justify-content: left;
+}
+
+#file {
+    height: 200px;
+    width: 80%;
+}
+
+.modaleForm div {
+    width: 80%;
+    border-top: solid  1px grey;
+    display: flex;
+    justify-content: center;
+    margin: 2%;
+}
+
+.modaleForm button {
+    width: 50%;
+    height: 3em;
+    border-radius: 20px;
+    background-color: grey;
+    color: white;
+    margin: 5%;
+}
+
+.modaleForm button:hover {
+    background-color: #1D6154;
 }
 
 .modal-retour {
