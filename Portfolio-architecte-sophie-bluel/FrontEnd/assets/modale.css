@@ -147,9 +147,16 @@ select {
   background-color: #1d6154;
 }
 
+.modalNav {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: baseline;
+}
+
 .modal-retour {
   border: none;
   background-color: white;
+  display: none;
 }
 
 .menuModale1 {

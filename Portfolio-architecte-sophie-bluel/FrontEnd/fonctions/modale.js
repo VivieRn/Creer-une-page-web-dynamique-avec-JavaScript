@@ -121,7 +121,7 @@ const openModal = async function (e) {
       const replaceModalContent = async function () {
         // Création du contenu formulaire
         const formHTML = `
-          <button class="modal-retour"><i class="fa-sharp fa-solid fa-arrow-left"></i></button>
+          
           <form class="modaleForm">
             <label class="modaleFormMainTitle" for="file">Ajout photo</label>
             <input type="file" id="file" name="file" accept="image/*">
@@ -150,11 +150,14 @@ const openModal = async function (e) {
         const form = modal.querySelector(".modaleForm");
         form.addEventListener("submit", handleFormSubmit);
         const retourButton = modal.querySelector(".modal-retour");
+        retourButton.style.display = "block";
         retourButton.addEventListener("click", handleRetourClick);
       };
 
       //Gestion de l'événement retour depuis ajouter une photo
       const handleRetourClick = () => {
+        const retourButton = modal.querySelector(".modal-retour");
+        retourButton.style.display = "none";
         const jsModale2 = modal.querySelector(".js-modale2");
         jsModale2.style.display = "none";
         const jsModale = modal.querySelector(".js-modale");
