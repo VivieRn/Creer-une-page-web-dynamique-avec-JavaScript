@@ -89,7 +89,7 @@ const openModal = async function (e) {
           deleteButton.className = "imgDelete";
           deleteButton.setAttribute("data-id", cardImage.id);
           const deleteIcon = document.createElement("i");
-          deleteIcon.className = "fa-solid fa-xmark";
+          deleteIcon.className = "fa-regular fa-trash-can";
           deleteButton.appendChild(deleteIcon);
           pieceElement.appendChild(deleteButton);
 
