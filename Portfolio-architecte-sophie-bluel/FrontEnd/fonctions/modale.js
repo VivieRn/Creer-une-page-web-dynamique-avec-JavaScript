@@ -324,9 +324,9 @@ window.addEventListener("keydown", function (e) {
 function getAccessTokenFromCookie() {
   const cookie = document.cookie
     .split(";")
-    .find((cookie) => cookie.trim().startsWith("access_token="));
+    .find((cookie) => cookie.trim().startsWith("myAccessToken="));
   if (!cookie) {
-    return null;
+    console.log("Pas de cookies trouvé");
   }
   return cookie.split("=")[1];
 }

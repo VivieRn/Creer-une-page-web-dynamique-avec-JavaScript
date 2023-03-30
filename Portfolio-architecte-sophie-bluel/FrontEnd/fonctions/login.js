@@ -11,6 +11,7 @@ async function fetchLogin(event) {
     body: JSON.stringify({ email, password }),
     headers: {
       "content-type": "application/json",
+      credentials: "true",
     },
     method: "POST",
     mode: "cors",
@@ -18,16 +19,16 @@ async function fetchLogin(event) {
 
   if (response.ok) {
     const data = await response.json();
-    const token = data.token;
-    const cookieString = `access_token=${token}; Secure; SameSite=Strict; Max-Age=450`;
-    document.cookie = cookieString;
     const isAdmin = email === "sophie.bluel@test.tld";
-    const adminCookieString = `isAdmin=${isAdmin}; sameSite=Strict; Secure; Max-Age=900`;
-    document.cookie = adminCookieString;
     const userId = data.userId;
-    const userIdCookieString = `userId=${userId}; sameSite=None; Secure; max-age=900`; // 900 seconds = 15 minutes
+
+    const adminCookieString = `isAdmin=${isAdmin}; sameSite=None; Secure; Max-Age=900`;
+    document.cookie = adminCookieString;
+
+    const userIdCookieString = `userId=${userId}; sameSite=None; Secure; max-age=900`;
     document.cookie = userIdCookieString;
-    window.location.href = "index.html";
+
+    /* window.location.href = "index.html";*/
   } else {
     const error = await response.json();
     alert("E-mail et/ou mot de passe incorrect.");
@@ -47,6 +48,8 @@ async function getData() {
     });
     const data = await response.json();
     // Traiter les données de la réponse
+    const myAccesToken = `myAccessToken=${data}; sameSite=None; Secure; httpOnly; max-age=900`;
+    document.cookie = myAccesToken;
   } else {
     alert("Token d'identification manquant.");
   }
