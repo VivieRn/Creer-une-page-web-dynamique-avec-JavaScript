@@ -205,6 +205,13 @@ const handleFormSubmit = async function (e) {
   e.preventDefault();
   const form = e.target;
 
+  // Récupération de la photo sélectionnée dans le formulaire
+  const photoInput = form.querySelector("#file");
+  const photoFile = photoInput.files[0];
+
+  const titleInput = form.querySelector("#title");
+  const title = titleInput.value;
+
   // Transformation de la catégorie
   const categorySelect = form.querySelector("#category");
   const categoryValue =
@@ -214,17 +221,24 @@ const handleFormSubmit = async function (e) {
   const formData = new FormData(form);
 
   // Ajout de la catégorie transformée à l'objet formData
+  formData.append("imageUrl", photoFile);
+  formData.append("title", title);
   formData.append("category", category);
+
+  const plainFormData = Object.fromEntries(formData.entries());
+  const jsonData = JSON.stringify(plainFormData);
+  console.log(jsonData);
 
   try {
     const token = getAccessTokenFromCookie();
     const response = await fetch("http://localhost:5678/api/works", {
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: formData,
       method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        accept: "multipart/form-data",
+      },
+      body: jsonData,
+      mode: "cors",
     });
     const responseData = await response.json();
     if (!response.ok) {
@@ -240,7 +254,7 @@ const handleFormSubmit = async function (e) {
     };
 
     // Création des éléments HTML de la carte image
-    const pieceElement = document.createElement("figure");
+    /*const pieceElement = document.createElement("figure");
     const imageElement = document.createElement("img");
     imageElement.src = newCardImage.imageUrl;
     const nomElement = document.createElement("figcaption");
@@ -254,7 +268,7 @@ const handleFormSubmit = async function (e) {
     deleteButton.className = "imgDelete";
     deleteButton.setAttribute("data-id", newCardImage.id);
     const deleteIcon = document.createElement("i");
-    deleteIcon.className = "fa-solid fa-xmark";
+    deleteIcon.className = "fa-regular fa-trash-can";
     deleteButton.appendChild(deleteIcon);
     pieceElement.appendChild(deleteButton);
 
@@ -270,7 +284,8 @@ const handleFormSubmit = async function (e) {
       if (cardImage) {
         cardImage.remove();
       }
-    });
+    });*/
+    replaceModalContent();
   } catch (error) {
     console.error(error);
   }
@@ -324,20 +339,9 @@ window.addEventListener("keydown", function (e) {
 function getAccessTokenFromCookie() {
   const cookie = document.cookie
     .split(";")
-    .find((cookie) => cookie.trim().startsWith("myAccessToken="));
+    .find((cookie) => cookie.trim().startsWith("token="));
   if (!cookie) {
     console.log("Pas de cookies trouvé");
-  }
-  return cookie.split("=")[1];
-}
-
-//Récupération du userId
-function getUserIdFromCookie() {
-  const cookie = document.cookie
-    .split(";")
-    .find((cookie) => cookie.trim().startsWith("userId="));
-  if (!cookie) {
-    return null;
   }
   return cookie.split("=")[1];
 }
