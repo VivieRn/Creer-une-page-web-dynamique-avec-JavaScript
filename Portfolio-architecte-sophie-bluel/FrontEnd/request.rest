@@ -1,0 +1,8 @@
+POST http://localhost:5678/api/works
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY4MDUxMTQzOCwiZXhwIjoxNjgwNTk3ODM4fQ.sMC4AJXO8Qia9s5UyA5NdZmV0jBRdxmT3cUeqR6RTsQ
+Accept: application/json
+Content-Type: multipart/form-data           
+
+image=@/assets/images/abajour-tahina.png
+title=abajour-tahina
+category=1

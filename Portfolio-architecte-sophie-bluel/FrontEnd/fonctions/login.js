@@ -24,7 +24,6 @@ async function fetchLogin(event) {
     const cookieOptions = {
       sameSite: "Strict",
       secure: true,
-      httpOnly: true,
       maxAge: 900, // la durée de validité en secondes, ici 15 minutes
     };
     try {

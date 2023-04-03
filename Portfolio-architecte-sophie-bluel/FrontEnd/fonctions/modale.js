@@ -124,7 +124,7 @@ const openModal = async function (e) {
           
           <form class="modaleForm">
             <label class="modaleFormMainTitle" for="file">Ajout photo</label>
-            <input type="file" id="file" name="file" accept="image/*">
+            <input action="/api/works" type="file" id="image" name="image" accept="image/*">
             <label class="modaleFormTitle" for="title">Titre</label>
             <input type="text" name="title" id="title">
             <label class="modaleFormTitle" for="category">Catégorie</label>
@@ -206,7 +206,7 @@ const handleFormSubmit = async function (e) {
   const form = e.target;
 
   // Récupération de la photo sélectionnée dans le formulaire
-  const photoInput = form.querySelector("#file");
+  const photoInput = form.querySelector("#image");
   const photoFile = photoInput.files[0];
 
   const titleInput = form.querySelector("#title");
@@ -221,13 +221,10 @@ const handleFormSubmit = async function (e) {
   const formData = new FormData(form);
 
   // Ajout de la catégorie transformée à l'objet formData
-  formData.append("imageUrl", photoFile);
+  formData.append("image", photoFile);
   formData.append("title", title);
   formData.append("category", category);
-
-  const plainFormData = Object.fromEntries(formData.entries());
-  const jsonData = JSON.stringify(plainFormData);
-  console.log(jsonData);
+  console.log(formData);
 
   try {
     const token = getAccessTokenFromCookie();
@@ -235,16 +232,16 @@ const handleFormSubmit = async function (e) {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
-        accept: "multipart/form-data",
+        accept: "application/json",
       },
-      body: jsonData,
+      body: formData,
       mode: "cors",
     });
     const responseData = await response.json();
     if (!response.ok) {
       throw new Error("Une erreur s'est produite lors de l'ajout de la photo.");
     }
-
+    console.log("FirstStep OK !!!!");
     // Création de la nouvelle carte image
     const newCardImage = {
       id: responseData.id,
@@ -254,7 +251,7 @@ const handleFormSubmit = async function (e) {
     };
 
     // Création des éléments HTML de la carte image
-    /*const pieceElement = document.createElement("figure");
+    const pieceElement = document.createElement("figure");
     const imageElement = document.createElement("img");
     imageElement.src = newCardImage.imageUrl;
     const nomElement = document.createElement("figcaption");
@@ -284,7 +281,7 @@ const handleFormSubmit = async function (e) {
       if (cardImage) {
         cardImage.remove();
       }
-    });*/
+    });
     replaceModalContent();
   } catch (error) {
     console.error(error);
