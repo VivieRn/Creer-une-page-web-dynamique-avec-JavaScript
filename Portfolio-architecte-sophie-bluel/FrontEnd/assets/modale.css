@@ -165,6 +165,10 @@ select {
   align-items: center;
 }
 
+#image-preview {
+  width: 35%;
+}
+
 .ajouterPhotos {
   background-color: #1d6154;
   color: white;
