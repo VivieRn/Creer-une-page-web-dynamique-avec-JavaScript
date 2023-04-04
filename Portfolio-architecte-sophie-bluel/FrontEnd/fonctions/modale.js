@@ -122,17 +122,21 @@ const openModal = async function (e) {
         // Création du contenu formulaire
         const formHTML = `
           
-          <form class="modaleForm">
-            <label class="modaleFormMainTitle" for="file">Ajout photo</label>
-            <input action="/api/works" type="file" id="image" name="image" accept="image/*">
+          <form class="modaleForm" method="post" enctype="multipart/form-data">
+
+            <label class="modaleFormMainTitle" for="image">Ajout photo</label>
+            <input type="file" id="image" name="image" accept="image/*">
+
             <label class="modaleFormTitle" for="title">Titre</label>
             <input type="text" name="title" id="title">
+
             <label class="modaleFormTitle" for="category">Catégorie</label>
             <select name="category" id="category">
               <option value="Objets">Objets</option>
               <option value="Appartements">Appartements</option>
               <option value="Hôtels & restaurants">Hôtels & restaurants</option>
             </select>
+
             <div>
             <button type="submit">Valider</button>
             </div>
@@ -147,8 +151,10 @@ const openModal = async function (e) {
 
         const modalContent = modal.querySelector(".js-modale2");
         modalContent.innerHTML = formHTML;
+
         const form = modal.querySelector(".modaleForm");
         form.addEventListener("submit", handleFormSubmit);
+
         const retourButton = modal.querySelector(".modal-retour");
         retourButton.style.display = "block";
         retourButton.addEventListener("click", handleRetourClick);
@@ -205,13 +211,6 @@ const handleFormSubmit = async function (e) {
   e.preventDefault();
   const form = e.target;
 
-  // Récupération de la photo sélectionnée dans le formulaire
-  const photoInput = form.querySelector("#image");
-  const photoFile = photoInput.files[0];
-
-  const titleInput = form.querySelector("#title");
-  const title = titleInput.value;
-
   // Transformation de la catégorie
   const categorySelect = form.querySelector("#category");
   const categoryValue =
@@ -220,11 +219,11 @@ const handleFormSubmit = async function (e) {
 
   const formData = new FormData(form);
 
-  // Ajout de la catégorie transformée à l'objet formData
-  formData.append("image", photoFile);
-  formData.append("title", title);
-  formData.append("category", category);
-  console.log(formData);
+  formData.set("category", category);
+
+  for (let item of formData) {
+    console.log(item[0], item[1]);
+  }
 
   try {
     const token = getAccessTokenFromCookie();
