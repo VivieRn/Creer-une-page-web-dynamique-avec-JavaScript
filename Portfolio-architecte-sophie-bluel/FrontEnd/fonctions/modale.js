@@ -126,7 +126,7 @@ const openModal = async function (e) {
 
             <label class="modaleFormMainTitle" for="image">Ajout photo</label>
             <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(event)">
-            <img id="image-preview" src="" alt="Image preview">
+            <img id="image-preview" src="" alt="jpg, png: 4mo max">
 
             <label class="modaleFormTitle" for="title">Titre</label>
             <input type="text" name="title" id="title">
@@ -139,7 +139,7 @@ const openModal = async function (e) {
             </select>
 
             <div>
-            <button type="submit">Valider</button>
+            <button id="btnAjoutPhoto" type="submit">Valider</button>
             </div>
           </form>
         `;
@@ -184,6 +184,11 @@ const openModal = async function (e) {
 
           // Lecture des données de l'image
           reader.readAsDataURL(selectedImage);
+
+          document.getElementById("image").style.display = "none";
+          document.getElementById("btnAjoutPhoto").style.backgroundColor =
+            "#1d6154";
+          document.getElementById("btnAjoutPhoto").style.cursor = "pointer";
         }
       };
 
