@@ -1,5 +1,4 @@
-import { fetchCardImages, genererCardImages } from "./filtres.js";
-/*import decode from "../../Backend/node_modules/jsonwebtoken/decode.js";*/
+import { fetchCardImages, genererCardImages } from "./genererCardImages.js";
 
 let modal = null;
 const focusableSelector = "button, input, textarea, a";
@@ -93,6 +92,15 @@ const openModal = async function (e) {
           deleteButton.appendChild(deleteIcon);
           pieceElement.appendChild(deleteButton);
 
+          // Ajout du bouton de déplacement
+          const moveButton = document.createElement("button");
+          moveButton.className = "imgMove";
+          moveButton.setAttribute("data-id", cardImage.id);
+          const moveIcon = document.createElement("i");
+          moveIcon.className = "fa-solid fa-arrows-up-down-left-right";
+          moveButton.appendChild(moveIcon);
+          pieceElement.appendChild(moveButton);
+
           const imageElement = document.createElement("img");
           imageElement.src = cardImage.imageUrl;
           const nomElement = document.createElement("figcaption");
@@ -114,13 +122,55 @@ const openModal = async function (e) {
               cardImage.remove();
             }
           });
+
+          // Récupérer toutes les images à déplacer
+          const cardImagesMove = document.querySelectorAll(".CarteImage");
+
+          // Ajouter un gestionnaire d'événements "mousedown" à chaque bouton de déplacement
+          document
+            .querySelectorAll(".imgMove")
+            .forEach(function (moveButton, i) {
+              moveButton.addEventListener("mousedown", function (event) {
+                // Empêcher la propagation de l'événement pour éviter les conflits avec d'autres événements
+                event.stopPropagation();
+
+                // Récupérer l'image correspondante
+                const cardImageMove = cardImagesMove[i];
+
+                // Calculer la distance entre la position de la souris et la position de l'image
+                const offsetX = event.clientX - cardImageMove.offsetLeft;
+                const offsetY = event.clientY - cardImageMove.offsetTop;
+
+                // Ajouter des gestionnaires d'événements "mousemove" et "mouseup" au document
+                document.addEventListener("mousemove", moveImage);
+                document.addEventListener("mouseup", stopMoving);
+
+                // Fonction pour déplacer l'image en fonction des mouvements de la souris
+                function moveImage(event) {
+                  // Calculer la nouvelle position de l'image en fonction de la position de la souris
+                  const left = event.clientX - offsetX;
+                  const top = event.clientY - offsetY;
+
+                  // Définir la nouvelle position de l'image
+                  cardImageMove.style.left = left + "px";
+                  cardImageMove.style.top = top + "px";
+                }
+
+                // Fonction pour supprimer les gestionnaires d'événements "mousemove" et "mouseup"
+                function stopMoving() {
+                  document.removeEventListener("mousemove", moveImage);
+                  document.removeEventListener("mouseup", stopMoving);
+                }
+              });
+            });
         });
       });
+    }
 
-      //Remplacement du contenu pour ajouter une photo
-      const replaceModalContent = async function () {
-        // Création du contenu formulaire
-        const formHTML = `
+    //Remplacement du contenu pour ajouter une photo
+    const replaceModalContent = async function () {
+      // Création du contenu formulaire
+      const formHTML = `
           
           <form class="modaleForm" method="post" enctype="multipart/form-data">
 
@@ -144,69 +194,67 @@ const openModal = async function (e) {
           </form>
         `;
 
-        // Insertion du formulaire dans la modale
-        const modaleGallery = modal.querySelector(".js-modale");
-        modaleGallery.style.display = "none";
-        const menuModale1 = modal.querySelector(".menuModale1");
-        menuModale1.style.display = "none";
+      // Insertion du formulaire dans la modale
+      const modaleGallery = modal.querySelector(".js-modale");
+      modaleGallery.style.display = "none";
+      const menuModale1 = modal.querySelector(".menuModale1");
+      menuModale1.style.display = "none";
 
-        const modalContent = modal.querySelector(".js-modale2");
-        modalContent.innerHTML = formHTML;
+      const modalContent = modal.querySelector(".js-modale2");
+      modalContent.innerHTML = formHTML;
 
-        const form = modal.querySelector(".modaleForm");
-        form.addEventListener("submit", handleFormSubmit);
+      const form = modal.querySelector(".modaleForm");
+      form.addEventListener("submit", handleFormSubmit);
 
-        const retourButton = modal.querySelector(".modal-retour");
-        retourButton.style.display = "block";
-        retourButton.addEventListener("click", handleRetourClick);
+      const retourButton = modal.querySelector(".modal-retour");
+      retourButton.style.display = "block";
+      retourButton.addEventListener("click", handleRetourClick);
 
-        document
-          .getElementById("image")
-          .addEventListener("change", function (event) {
-            previewImage(event);
-          });
+      document
+        .getElementById("image")
+        .addEventListener("change", function (event) {
+          previewImage(event);
+        });
 
-        function previewImage(event) {
-          // Récupération de l'élément HTML contenant la prévisualisation de l'image
-          var imgPreview = document.getElementById("image-preview");
+      function previewImage(event) {
+        // Récupération de l'élément HTML contenant la prévisualisation de l'image
+        var imgPreview = document.getElementById("image-preview");
 
-          // Récupération de l'image sélectionnée dans le formulaire
-          var selectedImage = event.target.files[0];
+        // Récupération de l'image sélectionnée dans le formulaire
+        var selectedImage = event.target.files[0];
 
-          // Création d'un objet FileReader pour lire les données de l'image
-          var reader = new FileReader();
+        // Création d'un objet FileReader pour lire les données de l'image
+        var reader = new FileReader();
 
-          // Définition de la fonction à exécuter lorsque la lecture est terminée
-          reader.onload = function (event) {
-            // Définition de la source de l'image dans l'élément HTML de prévisualisation
-            imgPreview.src = event.target.result;
-          };
+        // Définition de la fonction à exécuter lorsque la lecture est terminée
+        reader.onload = function (event) {
+          // Définition de la source de l'image dans l'élément HTML de prévisualisation
+          imgPreview.src = event.target.result;
+        };
 
-          // Lecture des données de l'image
-          reader.readAsDataURL(selectedImage);
+        // Lecture des données de l'image
+        reader.readAsDataURL(selectedImage);
 
-          document.getElementById("image").style.display = "none";
-          document.getElementById("btnAjoutPhoto").style.backgroundColor =
-            "#1d6154";
-          document.getElementById("btnAjoutPhoto").style.cursor = "pointer";
-        }
-      };
+        document.getElementById("image").style.display = "none";
+        document.getElementById("btnAjoutPhoto").style.backgroundColor =
+          "#1d6154";
+        document.getElementById("btnAjoutPhoto").style.cursor = "pointer";
+      }
+    };
 
-      //Gestion de l'événement retour depuis ajouter une photo
-      const handleRetourClick = () => {
-        const retourButton = modal.querySelector(".modal-retour");
-        retourButton.style.display = "none";
-        const jsModale2 = modal.querySelector(".js-modale2");
-        jsModale2.style.display = "none";
-        const jsModale = modal.querySelector(".js-modale");
-        jsModale.style.display = "block";
-        const menuModale1 = modal.querySelector(".menuModale1");
-        menuModale1.style.display = "flex";
-      };
-    }
+    //Gestion de l'événement retour depuis ajouter une photo
+    const handleRetourClick = () => {
+      const retourButton = modal.querySelector(".modal-retour");
+      retourButton.style.display = "none";
+      const jsModale2 = modal.querySelector(".js-modale2");
+      jsModale2.style.display = "none";
+      const jsModale = modal.querySelector(".js-modale");
+      jsModale.style.display = "block";
+      const menuModale1 = modal.querySelector(".menuModale1");
+      menuModale1.style.display = "flex";
+    };
   }
 };
-
 //Fermeture de la modale via plusieurs options
 const closeModal = function (e) {
   if (modal === null) return;
@@ -239,6 +287,7 @@ const categories = {
   "Hôtels & restaurants": "3",
 };
 
+//Envoie de la requête POST afin d'upload l'image
 const handleFormSubmit = async function (e) {
   e.preventDefault();
   const form = e.target;
