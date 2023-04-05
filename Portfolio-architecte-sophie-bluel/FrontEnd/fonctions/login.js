@@ -35,8 +35,6 @@ async function fetchLogin(event) {
 }
 
 const isAdmin = email === "sophie.bluel@test.tld";
-if (isAdmin) {
+if (true) {
   setCookie("isAdmin", true, 24);
-} else {
-  setCookie("notAdmin", false, 24);
 }

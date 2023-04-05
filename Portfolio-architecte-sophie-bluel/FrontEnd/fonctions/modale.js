@@ -1,4 +1,6 @@
 import { fetchCardImages, genererCardImages } from "./genererCardImages.js";
+import { fetchDeleteImage } from "./fetchDeleteImage.js";
+import { handlePictureSubmit } from "./handlePictureSubmit.js";
 
 let modal = null;
 const focusableSelector = "button, input, textarea, a";
@@ -28,7 +30,7 @@ const openModal = async function (e) {
       //Ajout de l'événement d'ajout de photos
       const addButton = modal.querySelector(".ajouterPhotos");
       addButton.addEventListener("click", async () => {
-        await replaceModalContent();
+        await pictureSubmitForm();
       });
 
       // Ajout de l'événement de suppression pour chaque bouton de suppression
@@ -38,39 +40,13 @@ const openModal = async function (e) {
           e.preventDefault();
           const imageId = button.dataset.id;
           console.log(`delete button clicked with imageId ${imageId}`);
-          await deleteImage(imageId);
+          await fetchDeleteImage(imageId);
           const cardImage = document.querySelector(`[data-id="${imageId}"]`);
           if (cardImage) {
             cardImage.remove();
           }
         });
       });
-
-      //Suppression d'images par ID
-      const deleteImage = async (imageId) => {
-        try {
-          const token = getAccessTokenFromCookie();
-          const response = await fetch(
-            `http://localhost:5678/api/works/${imageId}`,
-            {
-              method: "DELETE",
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-          const responseData = await response.json();
-          if (!response.ok) {
-            throw new Error(responseData.message || "Unable to delete image.");
-          }
-          const cardImage = document.querySelector(`[data-id="${imageId}"]`);
-          if (cardImage) {
-            cardImage.remove();
-          }
-        } catch (err) {
-          console.error(`Error deleting image: ${err}`);
-        }
-      };
 
       // Récupère les données de la carte image à partir de l'API et appelle la fonction genererCardImages
       const sectionGallery = modal.querySelector(".modaleGallery");
@@ -116,7 +92,7 @@ const openModal = async function (e) {
             e.preventDefault();
             const imageId = deleteButton.getAttribute("data-id");
             console.log(`delete button clicked with imageId ${imageId}`);
-            await deleteImage(imageId);
+            await fetchDeleteImage(imageId);
             const cardImage = document.querySelector(`[data-id="${imageId}"]`);
             if (cardImage) {
               cardImage.remove();
@@ -168,7 +144,7 @@ const openModal = async function (e) {
     }
 
     //Remplacement du contenu pour ajouter une photo
-    const replaceModalContent = async function () {
+    const pictureSubmitForm = async function () {
       // Création du contenu formulaire
       const formHTML = `
           
@@ -204,7 +180,7 @@ const openModal = async function (e) {
       modalContent.innerHTML = formHTML;
 
       const form = modal.querySelector(".modaleForm");
-      form.addEventListener("submit", handleFormSubmit);
+      form.addEventListener("submit", handlePictureSubmit);
 
       const retourButton = modal.querySelector(".modal-retour");
       retourButton.style.display = "block";
@@ -280,94 +256,6 @@ const stopPropagation = function (e) {
   e.stopPropagation();
 };
 
-//Défintion des catégories pour ajout photo
-const categories = {
-  Objets: "1",
-  Appartements: "2",
-  "Hôtels & restaurants": "3",
-};
-
-//Envoie de la requête POST afin d'upload l'image
-const handleFormSubmit = async function (e) {
-  e.preventDefault();
-  const form = e.target;
-
-  // Transformation de la catégorie
-  const categorySelect = form.querySelector("#category");
-  const categoryValue =
-    categorySelect.options[categorySelect.selectedIndex].value;
-  const category = categories[categoryValue];
-
-  const formData = new FormData(form);
-
-  formData.set("category", category);
-
-  for (let item of formData) {
-    console.log(item[0], item[1]);
-  }
-
-  try {
-    const token = getAccessTokenFromCookie();
-    const response = await fetch("http://localhost:5678/api/works", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        accept: "application/json",
-      },
-      body: formData,
-      mode: "cors",
-    });
-    const responseData = await response.json();
-    if (!response.ok) {
-      throw new Error("Une erreur s'est produite lors de l'ajout de la photo.");
-    }
-    console.log("FirstStep OK !!!!");
-    // Création de la nouvelle carte image
-    const newCardImage = {
-      id: responseData.id,
-      title: formData.get("title"),
-      imageUrl: responseData.imageUrl,
-      categoryId: categories[formData.get("category")],
-    };
-
-    // Création des éléments HTML de la carte image
-    const pieceElement = document.createElement("figure");
-    const imageElement = document.createElement("img");
-    imageElement.src = newCardImage.imageUrl;
-    const nomElement = document.createElement("figcaption");
-    nomElement.innerText = newCardImage.title;
-
-    pieceElement.appendChild(imageElement);
-    pieceElement.appendChild(nomElement);
-
-    // Ajout du bouton de suppression
-    const deleteButton = document.createElement("button");
-    deleteButton.className = "imgDelete";
-    deleteButton.setAttribute("data-id", newCardImage.id);
-    const deleteIcon = document.createElement("i");
-    deleteIcon.className = "fa-regular fa-trash-can";
-    deleteButton.appendChild(deleteIcon);
-    pieceElement.appendChild(deleteButton);
-
-    sectionGallery.appendChild(pieceElement);
-
-    // Ajout de l'écouteur d'événements de suppression
-    deleteButton.addEventListener("click", async (e) => {
-      e.preventDefault();
-      const imageId = deleteButton.getAttribute("data-id");
-      console.log(`delete button clicked with imageId ${imageId}`);
-      await deleteImage(imageId);
-      const cardImage = document.querySelector(`[data-id="${imageId}"]`);
-      if (cardImage) {
-        cardImage.remove();
-      }
-    });
-    replaceModalContent();
-  } catch (error) {
-    console.error(error);
-  }
-};
-
 //Gestion de la navigation via 'Tab'
 const focusInModal = function (e) {
   e.preventDefault();
@@ -411,14 +299,3 @@ window.addEventListener("keydown", function (e) {
     focusInModal(e);
   }
 });
-
-//Récupération du token d'authentification
-function getAccessTokenFromCookie() {
-  const cookie = document.cookie
-    .split(";")
-    .find((cookie) => cookie.trim().startsWith("token="));
-  if (!cookie) {
-    console.log("Pas de cookies trouvé");
-  }
-  return cookie.split("=")[1];
-}
