@@ -1,0 +1,8 @@
+{
+    "liveServer.settings.https": {
+    "enable": true,
+    "cert": "/Users/vivie/Documents/OpenClassrooms/Creez-une-page-web-dynamique-avec-JavaScript/Portfolio-architecte-sophie-bluel/FrontEnd/https/localhost.pem",
+    "key": "/Users/vivie/Documents/OpenClassrooms/Creez-une-page-web-dynamique-avec-JavaScript/Portfolio-architecte-sophie-bluel/FrontEnd/https/localhost.key",
+    "passphrase": "tialechat"
+    }
+}
