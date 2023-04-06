@@ -1,8 +1,35 @@
+const whitelistedOrigins = [
+  "http://localhost",
+  "http://localhost:5500",
+  "http://localhost:5678",
+  "http://127.0.0.1:5500/",
+  "http://127.0.0.1:5678/",
+];
+
+let token = "";
+
+self.addEventListener("message", function (event) {
+  if (event.data && event.data.type === "SET_TOKEN") {
+    token = event.data.token;
+    console.log("[SW] token set!");
+  }
+});
+
+const whitelistedPathRegex = /\/api\/[^.]*$/;
 // Version du Service Worker
 const version = "v1";
 
 // Fichiers à mettre en cache
-const filesToCache = ["../", "../index.html", "../fonctions/"];
+const filesToCache = [
+  "/Portfolio-architecte-sophie-bluel/serviceWorker.js",
+  "/Portfolio-architecte-sophie-bluel/Frontend/fonctions/login.js",
+];
+
+// Vérifie si l'origine est autorisée
+function isWhitelistedOrigin(request) {
+  const origin = request.origin || request.url;
+  return whitelistedOrigins.some((url) => origin.startsWith(url));
+}
 
 // Événement d'installation du Service Worker
 self.addEventListener("install", function (event) {
@@ -50,16 +77,24 @@ self.addEventListener("activate", function (event) {
 self.addEventListener("fetch", function (event) {
   console.log(`[${version}] Intercepting fetch event for ${event.request.url}`);
 
+  // Vérifier l'origine de la requête
+  if (!isWhitelistedOrigin(event.request)) {
+    console.log(
+      `[${version}] Ignoring request from origin ${event.request.origin}`
+    );
+    return;
+  }
+
   // Vérifier si la requête est déjà en cache
   event.respondWith(
     caches.match(event.request).then(function (response) {
       // Si la requête est en cache, renvoyer la réponse
-      if (response) {
+      /*if (response) {
         console.log(
           `[${version}] Using response from cache for ${event.request.url}`
         );
         return response;
-      }
+      }*/
 
       // Sinon, faire la requête normalement et mettre en cache la réponse
       return fetch(event.request).then(function (response) {

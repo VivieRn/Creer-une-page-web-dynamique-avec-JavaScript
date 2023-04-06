@@ -1,11 +1,11 @@
 import { setCookie } from "./setCookie.js";
+import { deleteCookie } from "./deleteCookie.js";
 
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker
-    .register(
-      "/Portfolio-architecte-sophie-bluel/FrontEnd/fonctions/serviceWorker.js",
-      { scope: "/Portfolio-architecte-sophie-bluel/FrontEnd/fonctions/" }
-    )
+    .register("/Portfolio-architecte-sophie-bluel/serviceWorker.js", {
+      scope: "/Portfolio-architecte-sophie-bluel/",
+    })
     .then(function (registration) {
       console.log(
         "ServiceWorker registration successful with scope: ",
@@ -37,16 +37,24 @@ async function fetchLogin(event) {
       setCookie("token", userToken, 24);
       const userId = user.userId;
       setCookie("userId", userId, 24);
-      console.log("Connection OK");
+      const isAdmin = email === "sophie.bluel@test.tld";
+      if (true) {
+        setCookie("isAdmin", true, 24);
+      }
       window.location.href = "index.html";
+      navigator.serviceWorker.controller.postMessage({
+        type: "SET_TOKEN",
+        token: userToken,
+      });
+      console.log(
+        "loginResponse",
+        `serviceWorker updated with token value: ${userToken}`
+      );
+      deleteCookie("token");
+      console.log("Cookie delete");
     });
   } else {
     const error = await response.json();
     console.error(error);
   }
-}
-
-const isAdmin = email === "sophie.bluel@test.tld";
-if (true) {
-  setCookie("isAdmin", true, 24);
 }
