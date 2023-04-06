@@ -1,15 +1,11 @@
-import authModule from "./authModule.js";
-
-const auth = new authModule();
-
+import { getAccessTokenFromCookie } from "./getAccessTokenFromCookie.js";
 export const fetchDeleteImage = async (imageId) => {
   try {
-    const token = auth.getToken();
-    console.log(token);
+    const token = getAccessTokenFromCookie();
     const response = await fetch(`http://localhost:5678/api/works/${imageId}`, {
       method: "DELETE",
       headers: {
-        Authorization: `Bearer ${token}`, // Utilise le jeton dans les en-têtes de la requête
+        Authorization: `Bearer ${token}`,
       },
     });
     const responseData = await response.json();
