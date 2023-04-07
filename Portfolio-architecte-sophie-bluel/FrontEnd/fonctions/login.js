@@ -36,13 +36,14 @@ async function fetchLogin(event) {
       const userToken = user.token;
       setCookie("token", userToken, 24);
       const isAdmin = email === "sophie.bluel@test.tld";
-      if (true) {
-        setCookie("isAdmin", true, 24);
+      if (isAdmin) {
+        setCookie("isAdmin", 24);
       }
-      /*window.location.href = "index.html";*/
+      window.location.href = "index.html";
       navigator.serviceWorker.controller.postMessage({
         type: "SET_TOKEN",
         token: userToken,
+        isAdmin: isAdmin,
       });
       console.log(
         "loginResponse",
