@@ -35,13 +35,11 @@ async function fetchLogin(event) {
     response.json().then(function (user) {
       const userToken = user.token;
       setCookie("token", userToken, 24);
-      const userId = user.userId;
-      setCookie("userId", userId, 24);
       const isAdmin = email === "sophie.bluel@test.tld";
       if (true) {
         setCookie("isAdmin", true, 24);
       }
-      window.location.href = "index.html";
+      /*window.location.href = "index.html";*/
       navigator.serviceWorker.controller.postMessage({
         type: "SET_TOKEN",
         token: userToken,
@@ -51,6 +49,7 @@ async function fetchLogin(event) {
         `serviceWorker updated with token value: ${userToken}`
       );
       deleteCookie("token");
+      deleteCookie("isAdmin");
       console.log("Cookie delete");
     });
   } else {

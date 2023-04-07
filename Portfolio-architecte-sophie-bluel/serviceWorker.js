@@ -86,24 +86,59 @@ self.addEventListener("fetch", function (event) {
   }
 
   // Vérifier si la requête est déjà en cache
-  event.respondWith(
-    caches.match(event.request).then(function (response) {
-      // Si la requête est en cache, renvoyer la réponse
-      /*if (response) {
-        console.log(
-          `[${version}] Using response from cache for ${event.request.url}`
-        );
-        return response;
-      }*/
-
-      // Sinon, faire la requête normalement et mettre en cache la réponse
-      return fetch(event.request).then(function (response) {
-        console.log(`[${version}] Caching response from ${event.request.url}`);
-        return caches.open(version).then(function (cache) {
-          cache.put(event.request, response.clone());
+  if (shouldCacheRequest(event.request)) {
+    event.respondWith(
+      caches.match(event.request).then(function (response) {
+        // Si la requête est en cache, renvoyer la réponse
+        if (response) {
+          console.log(
+            `[${version}] Using response from cache for ${event.request.url}`
+          );
           return response;
+        }
+
+        // Sinon, faire la requête normalement et mettre en cache la réponse
+        return fetch(event.request).then(function (response) {
+          console.log(
+            `[${version}] Caching response from ${event.request.url}`
+          );
+          return caches.open(version).then(function (cache) {
+            cache.put(event.request, response.clone());
+            return response;
+          });
         });
-      });
-    })
-  );
+      })
+    );
+  }
 });
+
+const addAuthHeader = function (event) {
+  destURL = new URL(event.request.url);
+  if (
+    whitelistedOrigins.includes(destURL.origin) &&
+    whitelistedPathRegex.test(destURL.pathname)
+  ) {
+    const modifiedHeaders = new Headers(event.request.headers);
+    if (token) {
+      modifiedHeaders.append("Authorization", token);
+    }
+    const authReq = new Request(event.request, {
+      headers: modifiedHeaders,
+      mode: "cors",
+    });
+    event.respondWith((async () => fetch(authReq))());
+  }
+};
+
+// Intercept all fetch requests and add the auth header
+self.addEventListener("fetch", addAuthHeader);
+
+function shouldCacheRequest(request) {
+  // Vérifier si la méthode de la requête est POST
+  if (request.method === "POST") {
+    console.log("POST request will not be cached.");
+    return false;
+  }
+
+  return true;
+}
