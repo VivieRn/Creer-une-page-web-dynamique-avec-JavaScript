@@ -1,5 +1,6 @@
 import { setCookie } from "./setCookie.js";
 import { deleteCookie } from "./deleteCookie.js";
+import { adminAccess } from "./adminAccess.js";
 
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker
@@ -45,13 +46,9 @@ async function fetchLogin(event) {
         token: userToken,
         isAdmin: isAdmin,
       });
-      console.log(
-        "loginResponse",
-        `serviceWorker updated with token value: ${userToken}`
-      );
       deleteCookie("token");
       deleteCookie("isAdmin");
-      console.log("Cookie delete");
+      adminAccess(isAdmin);
     });
   } else {
     const error = await response.json();
