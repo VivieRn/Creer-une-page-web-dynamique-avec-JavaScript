@@ -1,6 +1,7 @@
 import { setCookie } from "./setCookie.js";
 import { deleteCookie } from "./deleteCookie.js";
-import { adminAccess } from "./adminAccess.js";
+
+let isAdmin = false;
 
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker
@@ -36,22 +37,26 @@ async function fetchLogin(event) {
     response.json().then(function (user) {
       const userToken = user.token;
       setCookie("token", userToken, 24);
-      const isAdmin = email === "sophie.bluel@test.tld";
+      isAdmin = email === "sophie.bluel@test.tld";
       if (isAdmin) {
-        setCookie("isAdmin", 24);
+        setCookie("isAdmin", isAdmin, 24);
       }
       window.location.href = "index.html";
       navigator.serviceWorker.controller.postMessage({
         type: "SET_TOKEN",
         token: userToken,
+      });
+      navigator.serviceWorker.controller.postMessage({
+        type: "SET_ADMIN",
         isAdmin: isAdmin,
       });
       deleteCookie("token");
       deleteCookie("isAdmin");
-      adminAccess(isAdmin);
     });
   } else {
     const error = await response.json();
     console.error(error);
   }
 }
+
+export { isAdmin };

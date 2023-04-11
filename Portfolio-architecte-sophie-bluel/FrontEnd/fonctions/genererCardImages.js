@@ -12,14 +12,14 @@ let cardElements = [];
 // Fonction de génération de cartes images
 function genererCardImages(cardImages) {
   // Si des éléments ont déjà été générés, mettre à jour les données existantes
-  /*if (cardElements.length > 0) {
+  if (cardElements.length > 0) {
     for (let i = 0; i < cardImages.length; i++) {
       const article = cardImages[i];
       const element = cardElements[i];
       element.querySelector("img").src = article.imageUrl;
       element.querySelector("figcaption").innerText = article.title;
     }
-  } else*/ {
+  } else {
     // Sinon, générer de nouveaux éléments
     for (let i = 0; i < cardImages.length; i++) {
       const article = cardImages[i];

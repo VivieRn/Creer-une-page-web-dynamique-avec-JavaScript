@@ -7,13 +7,33 @@ const whitelistedOrigins = [
 ];
 
 let token = "";
+let isAdmin = false;
 
 self.addEventListener("message", function (event) {
   if (event.data && event.data.type === "SET_TOKEN") {
     token = event.data.token;
     console.log("[SW] token set!");
+    cacheToken(token);
+  } else if (event.data && event.data.type === "SET_ADMIN") {
+    isAdmin = event.data.isAdmin;
+    console.log("[SW] isAdmin set!");
+    cacheIsAdmin(isAdmin);
   }
 });
+
+function cacheToken(token) {
+  const cacheName = "token-cache";
+  caches.open(cacheName).then(function (cache) {
+    cache.put(new Request("/token"), new Response(token));
+  });
+}
+
+function cacheIsAdmin(isAdmin) {
+  const cacheName = "isAdmin-cache";
+  caches.open(cacheName).then(function (cache) {
+    cache.put(new Request("/isAdmin"), new Response(isAdmin.toString()));
+  });
+}
 
 const whitelistedPathRegex = /\/api\/[^.]*$/;
 // Version du Service Worker
