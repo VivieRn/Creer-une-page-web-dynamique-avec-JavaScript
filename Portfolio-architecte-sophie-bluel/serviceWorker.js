@@ -59,9 +59,15 @@ const version = "v1";
 // Fichiers à mettre en cache
 const filesToCache = [
   "/Portfolio-architecte-sophie-bluel/serviceWorker.js",
+  "/Portfolio-architecte-sophie-bluel/Frontend/fonctions/adminAccess.js",
+  "/Portfolio-architecte-sophie-bluel/Frontend/fonctions/deleteCookie.js",
+  "/Portfolio-architecte-sophie-bluel/Frontend/fonctions/fetchDeleteImage.js",
+  "/Portfolio-architecte-sophie-bluel/Frontend/fonctions/getTokenFromCache.js",
+  "/Portfolio-architecte-sophie-bluel/Frontend/fonctions/handlePictureSubmit.js",
   "/Portfolio-architecte-sophie-bluel/Frontend/fonctions/login.js",
   "/Portfolio-architecte-sophie-bluel/Frontend/fonctions/logout.js",
-  "/Portfolio-architecte-sophie-bluel/Frontend/fonctions/adminAccess.js",
+  "/Portfolio-architecte-sophie-bluel/Frontend/fonctions/modale.js",
+  "/Portfolio-architecte-sophie-bluel/Frontend/fonctions/setCookie.js",
 ];
 
 // Vérifie si l'origine est autorisée
@@ -150,46 +156,6 @@ self.addEventListener("fetch", function (event) {
     );
   }
 });
-
-/*const addAuthHeader = function (event) {
-  console.log("AddAuth start");
-  destURL = new URL(event.request.url);
-  if (whitelistedOrigins.includes(destURL.origin)) {
-    const modifiedHeaders = new Headers(event.request.headers);
-    // Check if token is cached
-    caches
-      .match("/token")
-      .then(function (response) {
-        if (response) {
-          console.log("Token founded");
-          // Get the cached token
-          return response.json();
-        } else {
-          console.log("Token not found in cache");
-          return Promise.reject();
-        }
-      })
-      .then(function (token) {
-        // Append the token to the Authorization header
-        modifiedHeaders.append("Authorization ", "Bearer " + token);
-
-        // Continue with the fetch request with modified headers
-        const modifiedRequest = new Request(event.request.url, {
-          headers: modifiedHeaders,
-        });
-        return fetch(modifiedRequest);
-      })
-      .catch(function () {
-        // Continue with the fetch request with original headers
-        return fetch(event.request);
-      });
-  } else {
-    console.log("Requête non concernée");
-  }
-};
-
-// Intercept all fetch requests and add the auth header
-self.addEventListener("fetch", addAuthHeader);*/
 
 function shouldCacheRequest(request) {
   // Vérifier si la méthode de la requête est POST
