@@ -3,22 +3,6 @@ import { deleteCookie } from "./deleteCookie.js";
 
 let isAdmin = false;
 
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker
-    .register("/Portfolio-architecte-sophie-bluel/serviceWorker.js", {
-      scope: "/Portfolio-architecte-sophie-bluel/",
-    })
-    .then(function (registration) {
-      console.log(
-        "ServiceWorker registration successful with scope: ",
-        registration.scope
-      );
-    })
-    .catch(function (error) {
-      console.log("ServiceWorker registration failed: ", error);
-    });
-}
-
 const form = document.querySelector("form");
 form.addEventListener("submit", fetchLogin);
 async function fetchLogin(event) {
@@ -54,8 +38,7 @@ async function fetchLogin(event) {
       deleteCookie("isAdmin");
     });
   } else {
-    const error = await response.json();
-    console.error(error);
+    alert("E-mail ou môt de passe incorrect.");
   }
 }
 

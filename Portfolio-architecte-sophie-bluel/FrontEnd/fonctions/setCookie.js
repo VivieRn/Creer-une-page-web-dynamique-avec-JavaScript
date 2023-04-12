@@ -6,7 +6,7 @@ export function setCookie(name, value, expirationInHours) {
     var expireTime = time + expirationInHours * 60 * 60 * 1000;
     now.setTime(expireTime);
     expires = "; expires=" + now.toUTCString() + ";";
-    expires += " sameSite=none;";
+    expires += " sameSite=Strict;";
     expires += " secure";
   }
 

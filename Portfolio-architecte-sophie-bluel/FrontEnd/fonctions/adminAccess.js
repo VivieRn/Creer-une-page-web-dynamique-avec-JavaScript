@@ -26,8 +26,6 @@ export function adminAccess() {
         const menuFiltre = document.getElementById("filtre");
         menuFiltre.style.display = "none";
       }
-    } else {
-      console.log("Not admin");
     }
   });
 }

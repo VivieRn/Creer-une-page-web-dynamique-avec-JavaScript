@@ -11,32 +11,21 @@ let cardElements = [];
 
 // Fonction de génération de cartes images
 function genererCardImages(cardImages) {
-  // Si des éléments ont déjà été générés, mettre à jour les données existantes
-  if (cardElements.length > 0) {
-    for (let i = 0; i < cardImages.length; i++) {
-      const article = cardImages[i];
-      const element = cardElements[i];
-      element.querySelector("img").src = article.imageUrl;
-      element.querySelector("figcaption").innerText = article.title;
-    }
-  } else {
-    // Sinon, générer de nouveaux éléments
-    for (let i = 0; i < cardImages.length; i++) {
-      const article = cardImages[i];
-      const sectionGallery = document.querySelector(".gallery");
-      const pieceElement = document.createElement("figure");
-      const imageElement = document.createElement("img");
-      imageElement.src = article.imageUrl;
-      const nomElement = document.createElement("figcaption");
-      nomElement.innerText = article.title;
+  for (let i = 0; i < cardImages.length; i++) {
+    const article = cardImages[i];
+    const sectionGallery = document.querySelector(".gallery");
+    const pieceElement = document.createElement("figure");
+    const imageElement = document.createElement("img");
+    imageElement.src = article.imageUrl;
+    const nomElement = document.createElement("figcaption");
+    nomElement.innerText = article.title;
 
-      sectionGallery.appendChild(pieceElement);
-      pieceElement.appendChild(imageElement);
-      pieceElement.appendChild(nomElement);
+    sectionGallery.appendChild(pieceElement);
+    pieceElement.appendChild(imageElement);
+    pieceElement.appendChild(nomElement);
 
-      // Ajouter les éléments générés à la variable cardElements
-      cardElements.push(pieceElement);
-    }
+    // Ajouter les éléments générés à la variable cardElements
+    cardElements.push(pieceElement);
   }
 }
 

@@ -98,47 +98,6 @@ const openModal = async function (e) {
               cardImage.remove();
             }
           });
-
-          // Récupérer toutes les images à déplacer
-          const cardImagesMove = document.querySelectorAll(".CarteImage");
-
-          // Ajouter un gestionnaire d'événements "mousedown" à chaque bouton de déplacement
-          document
-            .querySelectorAll(".imgMove")
-            .forEach(function (moveButton, i) {
-              moveButton.addEventListener("mousedown", function (event) {
-                // Empêcher la propagation de l'événement pour éviter les conflits avec d'autres événements
-                event.stopPropagation();
-
-                // Récupérer l'image correspondante
-                const cardImageMove = cardImagesMove[i];
-
-                // Calculer la distance entre la position de la souris et la position de l'image
-                const offsetX = event.clientX - cardImageMove.offsetLeft;
-                const offsetY = event.clientY - cardImageMove.offsetTop;
-
-                // Ajouter des gestionnaires d'événements "mousemove" et "mouseup" au document
-                document.addEventListener("mousemove", moveImage);
-                document.addEventListener("mouseup", stopMoving);
-
-                // Fonction pour déplacer l'image en fonction des mouvements de la souris
-                function moveImage(event) {
-                  // Calculer la nouvelle position de l'image en fonction de la position de la souris
-                  const left = event.clientX - offsetX;
-                  const top = event.clientY - offsetY;
-
-                  // Définir la nouvelle position de l'image
-                  cardImageMove.style.left = left + "px";
-                  cardImageMove.style.top = top + "px";
-                }
-
-                // Fonction pour supprimer les gestionnaires d'événements "mousemove" et "mouseup"
-                function stopMoving() {
-                  document.removeEventListener("mousemove", moveImage);
-                  document.removeEventListener("mouseup", stopMoving);
-                }
-              });
-            });
         });
       });
     }

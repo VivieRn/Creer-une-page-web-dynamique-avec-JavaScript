@@ -1,5 +1,5 @@
+import { getTokenFromCache } from "./getTokenFromCache.js";
 //Envoie de la requête POST afin d'upload l'image
-import { getAccessTokenFromCookie } from "./getAccessTokenFromCookie.js";
 export const handlePictureSubmit = async function (e) {
   e.preventDefault();
   const form = e.target;
@@ -19,7 +19,7 @@ export const handlePictureSubmit = async function (e) {
   }
 
   try {
-    const token = getAccessTokenFromCookie();
+    const token = await getTokenFromCache();
     const response = await fetch("http://localhost:5678/api/works", {
       method: "POST",
       headers: {

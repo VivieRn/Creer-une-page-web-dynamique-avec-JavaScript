@@ -1,9 +1,25 @@
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker
+    .register("/Portfolio-architecte-sophie-bluel/serviceWorker.js", {
+      scope: "/Portfolio-architecte-sophie-bluel/",
+    })
+    .then(function (registration) {
+      console.log(
+        "ServiceWorker registration successful with scope: ",
+        registration.scope
+      );
+    })
+    .catch(function (error) {
+      console.log("ServiceWorker registration failed: ", error);
+    });
+}
+
 const whitelistedOrigins = [
   "http://localhost",
   "http://localhost:5500",
   "http://localhost:5678",
-  "http://127.0.0.1:5500/",
-  "http://127.0.0.1:5678/",
+  "http://127.0.0.1:5500",
+  "http://127.0.0.1:5678",
 ];
 
 let token = "";
@@ -35,7 +51,8 @@ function cacheIsAdmin(isAdmin) {
   });
 }
 
-const whitelistedPathRegex = /\/api\/[^.]*$/;
+const whitelistedPathRegex = /^\/api\/(?!.*\.(?:jpe?g|png)$)[^/]*$/;
+
 // Version du Service Worker
 const version = "v1";
 
@@ -43,6 +60,8 @@ const version = "v1";
 const filesToCache = [
   "/Portfolio-architecte-sophie-bluel/serviceWorker.js",
   "/Portfolio-architecte-sophie-bluel/Frontend/fonctions/login.js",
+  "/Portfolio-architecte-sophie-bluel/Frontend/fonctions/logout.js",
+  "/Portfolio-architecte-sophie-bluel/Frontend/fonctions/adminAccess.js",
 ];
 
 // Vérifie si l'origine est autorisée
@@ -132,30 +151,49 @@ self.addEventListener("fetch", function (event) {
   }
 });
 
-const addAuthHeader = function (event) {
+/*const addAuthHeader = function (event) {
+  console.log("AddAuth start");
   destURL = new URL(event.request.url);
-  if (
-    whitelistedOrigins.includes(destURL.origin) &&
-    whitelistedPathRegex.test(destURL.pathname)
-  ) {
+  if (whitelistedOrigins.includes(destURL.origin)) {
     const modifiedHeaders = new Headers(event.request.headers);
-    if (token) {
-      modifiedHeaders.append("Authorization", token);
-    }
-    const authReq = new Request(event.request, {
-      headers: modifiedHeaders,
-      mode: "cors",
-    });
-    event.respondWith((async () => fetch(authReq))());
+    // Check if token is cached
+    caches
+      .match("/token")
+      .then(function (response) {
+        if (response) {
+          console.log("Token founded");
+          // Get the cached token
+          return response.json();
+        } else {
+          console.log("Token not found in cache");
+          return Promise.reject();
+        }
+      })
+      .then(function (token) {
+        // Append the token to the Authorization header
+        modifiedHeaders.append("Authorization ", "Bearer " + token);
+
+        // Continue with the fetch request with modified headers
+        const modifiedRequest = new Request(event.request.url, {
+          headers: modifiedHeaders,
+        });
+        return fetch(modifiedRequest);
+      })
+      .catch(function () {
+        // Continue with the fetch request with original headers
+        return fetch(event.request);
+      });
+  } else {
+    console.log("Requête non concernée");
   }
 };
 
 // Intercept all fetch requests and add the auth header
-self.addEventListener("fetch", addAuthHeader);
+self.addEventListener("fetch", addAuthHeader);*/
 
 function shouldCacheRequest(request) {
   // Vérifier si la méthode de la requête est POST
-  if (request.method === "POST") {
+  if (request.method === "POST" || "DELETE") {
     console.log("POST request will not be cached.");
     return false;
   }

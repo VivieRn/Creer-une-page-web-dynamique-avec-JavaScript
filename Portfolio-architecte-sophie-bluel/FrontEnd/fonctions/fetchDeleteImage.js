@@ -1,7 +1,8 @@
-import { getAccessTokenFromCookie } from "./getAccessTokenFromCookie.js";
+import { getTokenFromCache } from "./getTokenFromCache.js";
+
 export const fetchDeleteImage = async (imageId) => {
   try {
-    const token = getAccessTokenFromCookie();
+    const token = await getTokenFromCache();
     const response = await fetch(`http://localhost:5678/api/works/${imageId}`, {
       method: "DELETE",
       headers: {
@@ -9,6 +10,7 @@ export const fetchDeleteImage = async (imageId) => {
       },
     });
     const responseData = await response.json();
+    console.log(response);
     if (!response.ok) {
       throw new Error(responseData.message || "Unable to delete image.");
     }
