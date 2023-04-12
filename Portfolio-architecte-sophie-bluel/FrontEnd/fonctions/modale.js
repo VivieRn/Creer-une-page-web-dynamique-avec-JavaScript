@@ -204,11 +204,11 @@ const closeModal = function (e) {
   modal
     .querySelector(".js-modal-stop")
     .removeEventListener("click", stopPropagation);
-  const hideModal = function () {
-    modal.style.display = "none";
-    modal.removeEventListener("animationend", hideModal);
+  const removeModal = function () {
+    modal.parentNode.removeChild(modal);
+    modal.removeEventListener("animationend", removeModal);
   };
-  modal.addEventListener("animationend", hideModal);
+  modal.addEventListener("animationend", removeModal);
 };
 
 const stopPropagation = function (e) {
