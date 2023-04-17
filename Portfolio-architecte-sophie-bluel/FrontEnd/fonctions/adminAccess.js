@@ -1,14 +1,20 @@
 function cacheIsAdmin() {
-  return caches.open("isAdmin-cache").then(function (cache) {
-    return cache.match("/isAdmin").then(function (response) {
-      if (response) {
-        return response.text().then(function (text) {
-          return text === "true";
+  return caches.has("isAdmin-cache").then(function (cacheExists) {
+    if (cacheExists) {
+      return caches.open("isAdmin-cache").then(function (cache) {
+        return cache.match("/isAdmin").then(function (response) {
+          if (response) {
+            return response.text().then(function (text) {
+              return text === "true";
+            });
+          } else {
+            return false;
+          }
         });
-      } else {
-        return false;
-      }
-    });
+      });
+    } else {
+      return false;
+    }
   });
 }
 
