@@ -31,7 +31,6 @@ export const handlePictureSubmit = async function (e) {
     });
 
     if (!response.ok) {
-      alert("Requête non autorisé.");
       return;
     } else {
       const responseData = await response.json();
@@ -63,7 +62,6 @@ export const handlePictureSubmit = async function (e) {
     }
   } catch (error) {
     console.error(error);
-    alert("Une erreur s'est produite lors de l'ajout de la photo.");
     return;
   }
 };
