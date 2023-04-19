@@ -1,5 +1,5 @@
 import { loadModal } from "./loadModal.js";
-import { fetchCardImages, genererCardImages } from "./genererCardImages.js";
+import { fetchCardImages } from "./genererCardImages.js";
 import { fetchDeleteImage } from "./fetchDeleteImage.js";
 import { handlePictureSubmit } from "./handlePictureSubmit.js";
 import { previewImage } from "./previewImage.js";
@@ -7,8 +7,6 @@ import { handleDeleteClick } from "./handleDeleteClick.js";
 import { formPictureSubmitHTML } from "./formPictureSubmitHTML.js";
 
 let modal = null;
-const focusableSelector = "button, input, textarea, a";
-let focusables = [];
 let previouslyFocusedElement = null;
 
 //Ouvrir la modale présente sur une autre page html
@@ -17,9 +15,7 @@ const openModal = async function (e) {
   const target = e?.target?.getAttribute?.("href");
   modal = await loadModal(target);
   if (!modal) return;
-  focusables = Array.from(modal.querySelectorAll(focusableSelector));
-  previouslyFocusedElement = document.activeElement;
-  focusables[0]?.focus?.();
+
   modal.style.display = null;
   modal.setAttribute("aria-modal", "true");
   modal.addEventListener("click", closeModal);
@@ -149,24 +145,6 @@ const stopPropagation = function (e) {
   e.stopPropagation();
 };
 
-//Gestion de la navigation via 'Tab'
-const focusInModal = function (e) {
-  e.preventDefault();
-  let index = focusables.findIndex((f) => f === modal.querySelector(":focus"));
-  if (e.shiftKey === true) {
-    index--;
-  } else {
-    index++;
-  }
-  if (index >= focusables.length) {
-    index = 0;
-  }
-  if (index < 0) {
-    index = focusables.length - 1;
-  }
-  focusables[index].focus();
-};
-
 document.querySelectorAll(".js-modale").forEach((a) => {
   a.addEventListener("click", openModal);
 });
@@ -174,8 +152,5 @@ document.querySelectorAll(".js-modale").forEach((a) => {
 window.addEventListener("keydown", function (e) {
   if (e.key === "Escape" || e.key === "Esc") {
     closeModal(e);
-  }
-  if (e.key === "Tab" && modal !== null) {
-    focusInModal(e);
   }
 });
