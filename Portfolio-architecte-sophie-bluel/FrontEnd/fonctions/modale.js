@@ -7,7 +7,6 @@ import { handleDeleteClick } from "./handleDeleteClick.js";
 import { formPictureSubmitHTML } from "./formPictureSubmitHTML.js";
 
 let modal = null;
-let previouslyFocusedElement = null;
 
 //Ouvrir la modale présente sur une autre page html
 const openModal = async function (e) {
@@ -128,7 +127,6 @@ const openModal = async function (e) {
 //Fermeture de la modale via plusieurs options
 const closeModal = function () {
   if (!modal) return;
-  previouslyFocusedElement?.focus();
   modal.removeAttribute("aria-modal");
   modal.setAttribute("aria-hidden", "true");
   modal.removeEventListener("click", closeModal);

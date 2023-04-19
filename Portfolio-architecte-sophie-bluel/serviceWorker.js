@@ -63,7 +63,9 @@ const filesToCache = [
   "/Portfolio-architecte-sophie-bluel/Frontend/fonctions/deleteCookie.js",
   "/Portfolio-architecte-sophie-bluel/Frontend/fonctions/fetchDeleteImage.js",
   "/Portfolio-architecte-sophie-bluel/Frontend/fonctions/getTokenFromCache.js",
+  "/Portfolio-architecte-sophie-bluel/Frontend/fonctions/handleDeleteClick.js",
   "/Portfolio-architecte-sophie-bluel/Frontend/fonctions/handlePictureSubmit.js",
+  "/Portfolio-architecte-sophie-bluel/Frontend/fonctions/loadModal.js",
   "/Portfolio-architecte-sophie-bluel/Frontend/fonctions/login.js",
   "/Portfolio-architecte-sophie-bluel/Frontend/fonctions/logout.js",
   "/Portfolio-architecte-sophie-bluel/Frontend/fonctions/modale.js",
@@ -163,6 +165,5 @@ function shouldCacheRequest(request) {
     console.log("POST request will not be cached.");
     return false;
   }
-
   return true;
 }

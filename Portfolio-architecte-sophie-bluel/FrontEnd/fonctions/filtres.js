@@ -6,6 +6,7 @@ const boutonTous = document.querySelector(".tous");
 
 boutonTous.addEventListener("click", async function () {
   const cardImages = await fetchCardImages();
+  document.querySelector(".gallery").innerHTML = "";
   genererCardImages(cardImages);
 });
 
