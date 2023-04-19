@@ -93,7 +93,6 @@ const openModal = async function (e) {
           deleteButton.addEventListener("click", async (e) => {
             e.preventDefault();
             const imageId = deleteButton.getAttribute("data-id");
-            console.log(`delete button clicked with imageId ${imageId}`);
             await fetchDeleteImage(imageId);
             const cardImage = document.querySelector(`[data-id="${imageId}"]`);
             if (cardImage) {
@@ -112,11 +111,11 @@ const openModal = async function (e) {
           <form class="modaleForm" method="post" enctype="multipart/form-data">
 
             <label class="modaleFormMainTitle" for="image">Ajout photo</label>
-            <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(event)">
+            <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(event)" required>
             <img id="image-preview" src="" alt="jpg, png: 4mo max">
 
             <label class="modaleFormTitle" for="title">Titre</label>
-            <input type="text" name="title" id="title">
+            <input type="text" name="title" id="title" required>
 
             <label class="modaleFormTitle" for="category">Catégorie</label>
             <select name="category" id="category">

@@ -38,7 +38,7 @@ async function fetchLogin(event) {
       deleteCookie("isAdmin");
     });
   } else {
-    alert("E-mail ou môt de passe incorrect.");
+    alert("E-mail ou mot de passe incorrect.");
   }
 }
 
