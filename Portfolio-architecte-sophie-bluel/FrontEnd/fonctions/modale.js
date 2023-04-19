@@ -4,6 +4,7 @@ import { fetchDeleteImage } from "./fetchDeleteImage.js";
 import { handlePictureSubmit } from "./handlePictureSubmit.js";
 import { previewImage } from "./previewImage.js";
 import { handleDeleteClick } from "./handleDeleteClick.js";
+import { formPictureSubmitHTML } from "./formPictureSubmitHTML.js";
 
 let modal = null;
 const focusableSelector = "button, input, textarea, a";
@@ -45,13 +46,12 @@ const openModal = async function (e) {
   sectionGallery.innerHTML = "";
 
   fetchCardImages().then((cardImages) => {
-    genererCardImages(cardImages);
-
-    cardImages.forEach((cardImage) => {
+    // Création des éléments HTML pour chaque image
+    const imageElements = cardImages.map((cardImage) => {
       const pieceElement = document.createElement("figure");
       pieceElement.className = "CarteImage";
 
-      // Ajout du bouton de suppression
+      // Bouton de suppression
       const deleteButton = document.createElement("button");
       deleteButton.className = "imgDelete";
       deleteButton.setAttribute("data-id", cardImage.id);
@@ -60,7 +60,7 @@ const openModal = async function (e) {
       deleteButton.appendChild(deleteIcon);
       pieceElement.appendChild(deleteButton);
 
-      // Ajout du bouton de déplacement
+      // Bouton de déplacement
       const moveButton = document.createElement("button");
       moveButton.className = "imgMove";
       moveButton.setAttribute("data-id", cardImage.id);
@@ -69,15 +69,13 @@ const openModal = async function (e) {
       moveButton.appendChild(moveIcon);
       pieceElement.appendChild(moveButton);
 
+      // Image et nom de l'image
       const imageElement = document.createElement("img");
       imageElement.src = cardImage.imageUrl;
       const nomElement = document.createElement("figcaption");
       nomElement.innerText = cardImage.title;
-
       pieceElement.appendChild(imageElement);
       pieceElement.appendChild(nomElement);
-
-      sectionGallery.appendChild(pieceElement);
 
       // Ajout de l'écouteur d'événements de suppression
       deleteButton.addEventListener("click", async (e) => {
@@ -89,30 +87,16 @@ const openModal = async function (e) {
           cardImage.remove();
         }
       });
+
+      return pieceElement;
     });
+
+    // Ajout des éléments HTML à la page
+    sectionGallery.append(...imageElements);
   });
 
   //Remplacement du contenu pour ajouter une photo
   const pictureSubmitForm = async function () {
-    const formHTML = `
-      <form class="modaleForm" method="post" enctype="multipart/form-data">
-        <label class="modaleFormMainTitle" for="image">Ajout photo</label>
-        <input type="file" id="image" name="image" accept="image/*" required>
-        <img id="image-preview" src="" alt="jpg, png: 4mo max">
-        <label class="modaleFormTitle" for="title">Titre</label>
-        <input type="text" name="title" id="title" required>
-        <label class="modaleFormTitle" for="category">Catégorie</label>
-        <select name="category" id="category">
-          <option value="Objets">Objets</option>
-          <option value="Appartements">Appartements</option>
-          <option value="Hôtels & restaurants">Hôtels & restaurants</option>
-        </select>
-        <div>
-          <button id="btnAjoutPhoto" type="submit">Valider</button>
-        </div>
-      </form>
-    `;
-
     const modaleGallery = modal.querySelector(".js-modale");
     modaleGallery.style.display = "none";
 
@@ -120,7 +104,7 @@ const openModal = async function (e) {
     menuModale1.style.display = "none";
 
     const modalContent = modal.querySelector(".js-modale2");
-    modalContent.innerHTML = formHTML;
+    modalContent.innerHTML = formPictureSubmitHTML;
 
     const form = modal.querySelector(".modaleForm");
     form.addEventListener("submit", handlePictureSubmit);
@@ -131,25 +115,26 @@ const openModal = async function (e) {
 
     document.getElementById("image").addEventListener("change", previewImage);
   };
+
   //Gestion de l'événement retour depuis ajouter une photo
   const handleRetourClick = () => {
     const retourButton = modal.querySelector(".modal-retour");
     retourButton.style.display = "none";
     const jsModale2 = modal.querySelector(".js-modale2");
-    jsModale2.style.display = "none";
+    jsModale2.innerHTML = "";
     const jsModale = modal.querySelector(".js-modale");
     jsModale.style.display = "block";
     const menuModale1 = modal.querySelector(".menuModale1");
     menuModale1.style.display = "flex";
   };
 };
+
 //Fermeture de la modale via plusieurs options
-const closeModal = function (e) {
-  if (modal === null) return;
-  if (previouslyFocusedElement !== null) previouslyFocusedElement.focus();
-  e.preventDefault();
-  modal.setAttribute("aria-hidden", "true");
+const closeModal = function () {
+  if (!modal) return;
+  previouslyFocusedElement?.focus();
   modal.removeAttribute("aria-modal");
+  modal.setAttribute("aria-hidden", "true");
   modal.removeEventListener("click", closeModal);
   modal
     .querySelector(".js-modal-close")
@@ -157,11 +142,7 @@ const closeModal = function (e) {
   modal
     .querySelector(".js-modal-stop")
     .removeEventListener("click", stopPropagation);
-  const removeModal = function () {
-    modal.parentNode.removeChild(modal);
-    modal.removeEventListener("animationend", removeModal);
-  };
-  modal.addEventListener("animationend", removeModal);
+  modal.addEventListener("animationend", () => modal.remove(), { once: true });
 };
 
 const stopPropagation = function (e) {
