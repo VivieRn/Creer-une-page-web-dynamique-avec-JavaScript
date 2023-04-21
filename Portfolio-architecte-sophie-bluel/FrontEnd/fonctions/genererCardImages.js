@@ -3,6 +3,11 @@ export { fetchCardImages, genererCardImages };
 async function fetchCardImages() {
   const response = await fetch("http://localhost:5678/api/works");
   const cardImages = await response.json();
+  if (!response) {
+    alert(
+      "Connexion au serveur impossible, merci de vérifier connexion internet."
+    );
+  }
   return cardImages;
 }
 

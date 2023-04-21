@@ -61,8 +61,7 @@ export const handlePictureSubmit = async function (e) {
       replaceModalContent(newCardImage);
     }
   } catch (error) {
-    console.error(error);
-    return;
+    alert("Une erreur est survenue. Merci de vérifier votre connexion.");
   }
 };
 

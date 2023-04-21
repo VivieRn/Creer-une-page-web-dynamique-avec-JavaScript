@@ -13,7 +13,10 @@ const openModal = async function (e) {
   e?.preventDefault?.(); // Utilisation de l'opérateur optionnel pour éviter les erreurs si e est undefined
   const target = e?.target?.getAttribute?.("href");
   modal = await loadModal(target);
-  if (!modal) return;
+  if (!modal) {
+    alert("Un problème est survenu, veuillez vérifier votre connexion.");
+    return;
+  }
 
   modal.style.display = null;
   modal.setAttribute("aria-modal", "true");
@@ -80,6 +83,8 @@ const openModal = async function (e) {
         const cardImage = document.querySelector(`[data-id="${imageId}"]`);
         if (cardImage) {
           cardImage.remove();
+        } else {
+          alert("Projet non trouvé.");
         }
       });
 

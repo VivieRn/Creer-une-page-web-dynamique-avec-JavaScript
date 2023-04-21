@@ -6,5 +6,7 @@ export async function handleDeleteClick(e) {
   const cardImage = document.querySelector(`[data-id="${imageId}"]`);
   if (cardImage) {
     cardImage.remove();
+  } else {
+    alert("Projet non trouvé.");
   }
 }
