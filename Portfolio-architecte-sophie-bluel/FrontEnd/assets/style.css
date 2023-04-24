@@ -304,6 +304,7 @@ footer nav ul {
   flex-direction: row;
   align-items: baseline;
   justify-content: center;
+  margin-bottom: 0;
 }
 
 .btnAdmin {

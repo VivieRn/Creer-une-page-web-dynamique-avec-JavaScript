@@ -70,10 +70,11 @@ const openModal = async function (e) {
       // Image et nom de l'image
       const imageElement = document.createElement("img");
       imageElement.src = cardImage.imageUrl;
-      const nomElement = document.createElement("figcaption");
-      nomElement.innerText = cardImage.title;
+      const editButton = document.createElement("button");
+      editButton.innerText = "éditer";
+      editButton.className = "editButton";
       pieceElement.appendChild(imageElement);
-      pieceElement.appendChild(nomElement);
+      pieceElement.appendChild(editButton);
 
       // Ajout de l'écouteur d'événements de suppression
       deleteButton.addEventListener("click", async (e) => {

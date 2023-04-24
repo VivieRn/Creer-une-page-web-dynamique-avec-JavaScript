@@ -17,7 +17,9 @@ export function previewImage(event) {
   // Lecture des données de l'image
   reader.readAsDataURL(selectedImage);
 
-  document.getElementById("image").style.display = "none";
+  document.querySelector(".modaleFormMainTitle").style.display = "none";
+  document.querySelector(".fa-image").style.display = "none";
+  document.querySelector(".selectPicture").style.backgroundColor = "white";
   document.getElementById("btnAjoutPhoto").style.backgroundColor = "#1d6154";
   document.getElementById("btnAjoutPhoto").style.cursor = "pointer";
 }
