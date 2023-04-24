@@ -49,6 +49,7 @@
   max-width: calc(100vw - 20px);
   max-height: calc(100vh - 20px);
   padding: 20px;
+  border-radius: 10px;
   background-color: white;
   overflow: auto;
   animation: slideFromTop 0.5s both;
@@ -123,22 +124,32 @@ select {
   border: none;
 }
 
-.modaleFormMainTitle {
-  font-weight: 200;
-  font-size: 25px;
-  color: black;
-  margin: 5%;
-}
-
 .modaleFormTitle {
   justify-content: left;
 }
 
+.modaleFormMainTitle {
+  font-weight: 200;
+  color: #306685;
+  margin-top: 15%;
+  cursor: pointer;
+}
+
+input[type="file"] {
+  width: 0;
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
 input#image {
-  height: 50px;
+  height: 80px;
   width: 80%;
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 .modaleForm div {
@@ -178,16 +189,21 @@ input#image {
 
 #image-preview {
   width: 35%;
+  display: flex;
+  justify-content: center;
 }
 
 .ajouterPhotos {
+  margin-top: 5em;
   background-color: #1d6154;
+  font-size: 15px;
   color: white;
   width: 55%;
   height: 3em;
   border-radius: 20px;
   margin-bottom: 2%;
   cursor: pointer;
+  border: none;
 }
 
 .supprimerGalerie {

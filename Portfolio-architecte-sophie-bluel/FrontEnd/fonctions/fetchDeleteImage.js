@@ -19,6 +19,6 @@ export const fetchDeleteImage = async (imageId) => {
       cardImage.remove();
     }
   } catch (err) {
-    alert("Suppression de projet refusé. Veuillez vous reconnecter.");
+    return;
   }
 };

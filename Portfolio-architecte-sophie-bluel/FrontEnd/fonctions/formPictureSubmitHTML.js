@@ -1,6 +1,7 @@
 export const formPictureSubmitHTML = `
       <form class="modaleForm" method="post" enctype="multipart/form-data">
-        <label class="modaleFormMainTitle" for="image">Ajout photo</label>
+      <h4 id="titleModale" class="titleModale">Ajout photo</h4>
+        <label class="modaleFormMainTitle" for="image">+ Ajouter photo</label>
         <input type="file" id="image" name="image" accept="image/*" required>
         <img id="image-preview" src="" alt="jpg, png: 4mo max">
         <label class="modaleFormTitle" for="title">Titre</label>
