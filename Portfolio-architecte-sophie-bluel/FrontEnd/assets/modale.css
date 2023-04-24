@@ -111,6 +111,7 @@
 .editButton {
   border: none;
   cursor: pointer;
+  background-color: white;
 }
 
 .modaleForm {
