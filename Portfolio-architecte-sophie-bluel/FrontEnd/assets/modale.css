@@ -1,17 +1,4 @@
-.modale {
-  position: fixed;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  animation: fadeIn 0.5s both;
-}
-
+/* Navigation dans la modale */
 .js-modal-close {
   border: none;
   width: 100%;
@@ -22,11 +9,7 @@
   flex-direction: row;
   justify-content: right;
 }
-
-.fa-xmark {
-  font-size: 1.2em;
-}
-
+/* Fenetre modale Galerie Photo */
 .titleModale {
   display: flex;
   justify-content: center;
@@ -34,25 +17,6 @@
   font-weight: 200;
   font-size: 25px;
   color: black;
-}
-
-.modale[aria-hidden="true"] {
-  animation-name: fadeOut;
-}
-
-.modale[aria-hidden="true"] .modale-wrapper {
-  animation-name: slideFromBottom;
-}
-
-.modale-wrapper {
-  width: 500px;
-  max-width: calc(100vw - 20px);
-  max-height: calc(100vh - 20px);
-  padding: 20px;
-  border-radius: 10px;
-  background-color: white;
-  overflow: auto;
-  animation: slideFromTop 0.5s both;
 }
 
 .js-modale {
@@ -114,6 +78,58 @@
   background-color: white;
 }
 
+.ajouterPhotos {
+  margin: 2em;
+  background-color: #1d6154;
+  font-family: "Syne";
+  color: white;
+  width: 55%;
+  height: 3em;
+  border-radius: 20px;
+  margin-bottom: 2%;
+  cursor: pointer;
+  border: none;
+}
+
+.supprimerGalerie {
+  margin: 1em;
+  border: 0;
+  font-family: "Syne";
+  color: red;
+  background-color: white;
+  cursor: pointer;
+}
+
+/* Fenetre modale Ajout de Photos */
+.modale {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  animation: fadeIn 0.5s both;
+}
+
+.fa-xmark {
+  font-size: 1.2em;
+}
+
+.modale-wrapper {
+  width: 500px;
+  max-width: calc(100vw - 20px);
+  max-height: calc(100vh - 20px);
+  padding: 20px;
+  border-radius: 10px;
+  background-color: white;
+  overflow: auto;
+  animation: slideFromTop 0.5s both;
+}
+
 .modaleForm {
   display: flex;
   flex-direction: column;
@@ -147,7 +163,7 @@ select {
 
 .selectPicture {
   background-color: #e8f1f6;
-  width: 100%;
+  width: 80%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -229,26 +245,14 @@ input#image {
   margin: 5%;
 }
 
-.ajouterPhotos {
-  margin: 2em;
-  background-color: #1d6154;
-  font-family: "Syne";
-  color: white;
-  width: 55%;
-  height: 3em;
-  border-radius: 20px;
-  margin-bottom: 2%;
-  cursor: pointer;
-  border: none;
+/* Animation de la fenetre modale */
+
+.modale[aria-hidden="true"] {
+  animation-name: fadeOut;
 }
 
-.supprimerGalerie {
-  margin: 1em;
-  border: 0;
-  font-family: "Syne";
-  color: red;
-  background-color: white;
-  cursor: pointer;
+.modale[aria-hidden="true"] .modale-wrapper {
+  animation-name: slideFromBottom;
 }
 
 @keyframes fadeIn {
