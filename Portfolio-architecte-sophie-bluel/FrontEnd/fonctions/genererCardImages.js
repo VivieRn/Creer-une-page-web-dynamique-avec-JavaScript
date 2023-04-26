@@ -1,14 +1,19 @@
 export { fetchCardImages, genererCardImages };
 
 async function fetchCardImages() {
-  const response = await fetch("http://localhost:5678/api/works");
-  const cardImages = await response.json();
-  if (!response) {
+  try {
+    const response = await fetch("http://localhost:5678/api/works", {
+      headers: { mode: "cors" },
+    });
+    const cardImages = await response.json();
+    return cardImages;
+  } catch (error) {
     alert(
-      "Connexion au serveur impossible, merci de vérifier connexion internet."
+      "Impossible de se connecter au serveur. Veuillez vérifier votre connexion Internet, si le problème persiste veuillez contacter l'administrateur du serveur."
     );
+    console.error(error);
+    return null;
   }
-  return cardImages;
 }
 
 // Définir une variable pour stocker les éléments générés

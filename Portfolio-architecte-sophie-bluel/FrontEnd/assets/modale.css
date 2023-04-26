@@ -10,6 +10,18 @@
   justify-content: right;
 }
 /* Fenetre modale Galerie Photo */
+
+.modale-wrapper {
+  width: 600px;
+  max-width: calc(100vw - 20px);
+  max-height: calc(100vh - 20px);
+  padding: 20px;
+  border-radius: 10px;
+  background-color: white;
+  overflow: auto;
+  animation: slideFromTop 0.5s both;
+}
+
 .titleModale {
   display: flex;
   justify-content: center;
@@ -30,8 +42,8 @@
   grid-column-gap: 10px;
   grid-row-gap: 10px;
   justify-content: center;
-  margin-top: 2em;
-  margin-bottom: 2em;
+  margin-top: 5%;
+  margin-bottom: 5%;
 }
 
 .CarteImage {
@@ -78,6 +90,16 @@
   background-color: white;
 }
 
+.menuModale1 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-top: solid 1px #b3b3b3;
+  margin-left: 17.5%;
+  margin-right: 17.5%;
+  margin-bottom: 1em;
+}
+
 .ajouterPhotos {
   margin: 2em;
   background-color: #1d6154;
@@ -117,17 +139,6 @@
 
 .fa-xmark {
   font-size: 1.2em;
-}
-
-.modale-wrapper {
-  width: 500px;
-  max-width: calc(100vw - 20px);
-  max-height: calc(100vh - 20px);
-  padding: 20px;
-  border-radius: 10px;
-  background-color: white;
-  overflow: auto;
-  animation: slideFromTop 0.5s both;
 }
 
 .modaleForm {
@@ -229,17 +240,8 @@ input#image {
   display: none;
 }
 
-.menuModale1 {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-top: solid 1px #b3b3b3;
-  margin: 10%;
-  margin-bottom: 1em;
-}
-
 #image-preview {
-  width: 45%;
+  width: 55%;
   display: flex;
   justify-content: center;
   margin: 5%;
