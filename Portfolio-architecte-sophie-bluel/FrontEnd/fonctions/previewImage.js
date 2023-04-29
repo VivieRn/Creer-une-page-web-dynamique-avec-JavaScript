@@ -20,6 +20,7 @@ export function previewImage(event) {
   document.querySelector(".modaleFormMainTitle").style.display = "none";
   document.querySelector(".fa-image").style.display = "none";
   document.querySelector(".selectPicture").style.backgroundColor = "white";
+  document.querySelector(".selectPicture").style.border = "none";
   document.getElementById("btnAjoutPhoto").style.backgroundColor = "#1d6154";
   document.getElementById("btnAjoutPhoto").style.cursor = "pointer";
 }

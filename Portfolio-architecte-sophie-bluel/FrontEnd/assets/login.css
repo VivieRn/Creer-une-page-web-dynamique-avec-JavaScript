@@ -49,6 +49,18 @@ input {
   background-color: white;
   cursor: pointer;
 }
+.emptyMsg {
+  color: red;
+  margin: 7%;
+  display: none;
+  width: 20em;
+}
+.errorMsg {
+  color: red;
+  margin: 7%;
+  display: none;
+  width: 20em;
+}
 li:hover {
   color: #1d6154;
 }

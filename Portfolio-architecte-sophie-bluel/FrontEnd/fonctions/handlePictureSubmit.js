@@ -3,6 +3,23 @@ import { getTokenFromCache } from "./getTokenFromCache.js";
 export const handlePictureSubmit = async function (e) {
   e.preventDefault();
   const form = e.target;
+  const title = form.title.value;
+  const file = form.image.files[0];
+
+  if (!title || !file) {
+    const errorMsg = document.querySelector(".emptyMsg");
+    errorMsg.style.display = "block";
+    const border = document.querySelector(".selectPicture");
+    border.style.border = "1px solid red";
+    border.style.borderRadius = "5px";
+    const redBorders = document.querySelectorAll(
+      "input[type='text'], input[type='file']"
+    );
+    for (let i = 0; i < redBorders.length; i++) {
+      redBorders[i].style.border = "1px solid red";
+    }
+    return;
+  }
 
   // Transformation de la catégorie
   const categorySelect = form.querySelector("#category");

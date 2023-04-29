@@ -247,6 +247,11 @@ input#image {
   margin: 5%;
 }
 
+.emptyMsg {
+  color: red;
+  display: none;
+  width: 20em;
+}
 /* Animation de la fenetre modale */
 
 .modale[aria-hidden="true"] {

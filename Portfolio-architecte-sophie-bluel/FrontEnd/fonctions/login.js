@@ -1,6 +1,3 @@
-import { setCookie } from "./setCookie.js";
-import { deleteCookie } from "./deleteCookie.js";
-
 let isAdmin = false;
 
 const form = document.querySelector("form");
@@ -10,6 +7,21 @@ async function fetchLogin(event) {
     event.preventDefault();
     const email = form.email.value;
     const password = form.mdp.value;
+    const emptyMsg = document.querySelector(".emptyMsg");
+    const errorMsg = document.querySelector(".errorMsg");
+    if (!email || !password) {
+      if (!emptyMsg.style.display || emptyMsg.style.display === "none") {
+        emptyMsg.style.display = "block";
+        const redBorders = document.querySelectorAll("input");
+        for (let i = 0; i < redBorders.length; i++) {
+          redBorders[i].style.border = "1px solid red";
+        }
+      }
+      if (errorMsg.style.display === "block") {
+        errorMsg.style.display = "none";
+      }
+      return;
+    }
     const response = await fetch("http://localhost:5678/api/users/login", {
       body: JSON.stringify({ email, password }),
       headers: {
@@ -21,11 +33,7 @@ async function fetchLogin(event) {
     if (response.ok) {
       response.json().then(function (user) {
         const userToken = user.token;
-        setCookie("token", userToken, 24);
         isAdmin = email === "sophie.bluel@test.tld";
-        if (isAdmin) {
-          setCookie("isAdmin", isAdmin, 24);
-        }
         window.location.href = "index.html";
         navigator.serviceWorker.controller.postMessage({
           type: "SET_TOKEN",
@@ -35,13 +43,16 @@ async function fetchLogin(event) {
           type: "SET_ADMIN",
           isAdmin: isAdmin,
         });
-        deleteCookie("token");
-        deleteCookie("isAdmin");
       });
     } else {
-      alert("E-mail ou mot de passe incorrect.");
+      if (!errorMsg.style.display || errorMsg.style.display === "none") {
+        errorMsg.style.display = "block";
+      }
+      if (emptyMsg.style.display === "block") {
+        emptyMsg.style.display = "none";
+      }
     }
-  } catch {
+  } catch (error) {
     alert(
       "Impossible de se connecter au serveur. Veuillez vérifier votre connexion Internet, si le problème persiste veuillez contacter l'administrateur du serveur."
     );

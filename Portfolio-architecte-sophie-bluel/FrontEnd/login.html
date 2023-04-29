@@ -32,9 +32,11 @@
           <h2>Log In</h2>
           <form method="get">
             <label for="email">E-mail</label>
-            <input type="text" id="email" name="email" required />
+            <input type="text" id="email" name="email" />
             <label for="mdp">Mot de passe</label>
-            <input type="password" id="mdp" name="mdp" required />
+            <input type="password" id="mdp" name="mdp" />
+            <div class="emptyMsg">Veuillez remplir tous les champs.</div>
+            <div class="errorMsg">E-mail ou mot de passe incorrect.</div>
             <div class="btnLogin">
               <button class="seConnecter" type="submit">Se connecter</button
               ><br />
