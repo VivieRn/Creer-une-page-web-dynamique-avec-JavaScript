@@ -34,7 +34,7 @@ async function fetchLogin(event) {
       response.json().then(function (user) {
         const userToken = user.token;
         isAdmin = email === "sophie.bluel@test.tld";
-        window.location.href = "index.html";
+        window.location.href = "../index.html";
         navigator.serviceWorker.controller.postMessage({
           type: "SET_TOKEN",
           token: userToken,

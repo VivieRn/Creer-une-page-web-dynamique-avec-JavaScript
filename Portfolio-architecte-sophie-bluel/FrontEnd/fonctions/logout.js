@@ -11,7 +11,7 @@ function logout() {
         }
       });
     }
-    window.location.href = "login.html";
+    window.location.href = "html/login.html";
   });
 }
 document.addEventListener("DOMContentLoaded", function () {
