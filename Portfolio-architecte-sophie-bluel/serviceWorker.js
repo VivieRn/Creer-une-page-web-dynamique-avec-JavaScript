@@ -1,18 +1,30 @@
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker
-    .register("/Portfolio-architecte-sophie-bluel/serviceWorker.js", {
-      scope: "/Portfolio-architecte-sophie-bluel/",
-    })
-    .then(function (registration) {
-      console.log(
-        "ServiceWorker registration successful with scope: ",
-        registration.scope
-      );
-    })
-    .catch(function (error) {
-      console.log("ServiceWorker registration failed: ", error);
-    });
-}
+const registerServiceWorker = async () => {
+  if ("serviceWorker" in navigator) {
+    try {
+      const registration = await navigator.serviceWorker.getRegistration();
+      if (!registration) {
+        // Service worker non enregistré, on l'installe
+        const newRegistration = await navigator.serviceWorker.register(
+          "/Portfolio-architecte-sophie-bluel/serviceWorker.js",
+          {
+            scope: "/Portfolio-architecte-sophie-bluel/",
+          }
+        );
+        if (newRegistration.installing) {
+          console.log("Installation du service worker en cours");
+        } else if (newRegistration.waiting) {
+          console.log("Service worker installé");
+        } else if (newRegistration.active) {
+          console.log("Service worker actif");
+        }
+      } else {
+        console.log("Service worker déjà enregistré");
+      }
+    } catch (error) {
+      console.error(`L'enregistrement a échoué : ${error}`);
+    }
+  }
+};
 
 const whitelistedOrigins = [
   "http://localhost",
@@ -60,7 +72,6 @@ const version = "v1";
 const filesToCache = [
   "/Portfolio-architecte-sophie-bluel/serviceWorker.js",
   "/Portfolio-architecte-sophie-bluel/Frontend/fonctions/adminAccess.js",
-  "/Portfolio-architecte-sophie-bluel/Frontend/fonctions/deleteCookie.js",
   "/Portfolio-architecte-sophie-bluel/Frontend/fonctions/fetchDeleteImage.js",
   "/Portfolio-architecte-sophie-bluel/Frontend/fonctions/getTokenFromCache.js",
   "/Portfolio-architecte-sophie-bluel/Frontend/fonctions/handleDeleteClick.js",
@@ -69,7 +80,6 @@ const filesToCache = [
   "/Portfolio-architecte-sophie-bluel/Frontend/fonctions/login.js",
   "/Portfolio-architecte-sophie-bluel/Frontend/fonctions/logout.js",
   "/Portfolio-architecte-sophie-bluel/Frontend/fonctions/modale.js",
-  "/Portfolio-architecte-sophie-bluel/Frontend/fonctions/setCookie.js",
 ];
 
 // Vérifie si l'origine est autorisée
@@ -167,3 +177,5 @@ function shouldCacheRequest(request) {
   }
   return true;
 }
+
+registerServiceWorker();
